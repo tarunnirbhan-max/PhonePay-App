@@ -1,4 +1,4 @@
-const CACHE_NAME = "phonepe-app-v2";
+const CACHE_NAME = "phonepe-app-v3";
 
 const FILES_TO_CACHE = [
     "./",
