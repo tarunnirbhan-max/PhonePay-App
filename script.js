@@ -788,7 +788,7 @@ async function openQRScanner() {
         }
     });
 }
-
+let scannedQRRecipient = null;
 // PROCESS SCANNED UPI QR
 
 async function handleQRScan(decodedText) {
@@ -839,34 +839,15 @@ async function handleQRScan(decodedText) {
         document.getElementById("scanned-upi").textContent = upiId;
         document.getElementById("scanned-recipient").hidden = false;
 
-        const enteredAmount = prompt(
-            "Pay to: " + name +
-            "\nUPI ID: " + upiId +
-            "\n\nEnter amount:"
-        );
+        scannedQRRecipient = { name, upiId };
 
-        if (enteredAmount === null) return;
+document.getElementById("qr-payee-name").textContent = name;
+document.getElementById("qr-payee-upi").textContent = "UPI ID: " + upiId;
 
-        const amount = getValidAmount(enteredAmount);
+document.getElementById("qr-payment-amount").value = "";
+document.getElementById("qr-payment-error").textContent = "";
 
-        if (amount === null) return;
-
-        if (amount > balance) {
-            alert("Insufficient virtual balance.");
-            return;
-        }
-
-        balance = Math.round((balance - amount) * 100) / 100;
-
-        addTransaction("QR Payment", amount, "debit", name);
-        announceSentPayment(amount);
-
-        alert(
-            "Transaction completed!\n" +
-            "Recipient: " + name +
-            "\nUPI ID: " + upiId +
-            "\nAmount: " + formatMoney(amount)
-        );
+qrPaymentModal.hidden = false;
 
     } catch (error) {
         console.error("QR processing error:", error);
@@ -875,7 +856,48 @@ async function handleQRScan(decodedText) {
         isProcessingQR = false;
     }
 }
+// QR PAYMENT MODAL BUTTONS
 
+const qrPaymentModal = document.getElementById("qr-payment-modal");
+const qrPaymentAmount = document.getElementById("qr-payment-amount");
+const qrPaymentError = document.getElementById("qr-payment-error");
+
+document.getElementById("qr-pay-now").addEventListener("click", function () {
+    const enteredAmount = qrPaymentAmount.value.trim();
+    const amount = Number(enteredAmount);
+
+    if (enteredAmount === "" || !Number.isFinite(amount) || amount <= 0) {
+        qrPaymentError.textContent = "Please enter a valid amount.";
+        return;
+    }
+
+    if (amount > balance) {
+        qrPaymentError.textContent = "Insufficient virtual balance.";
+        return;
+    }
+
+    if (!scannedQRRecipient) {
+        qrPaymentError.textContent = "Recipient details missing. Scan again.";
+        return;
+    }
+
+    const roundedAmount = Math.round(amount * 100) / 100;
+
+    balance = Math.round((balance - roundedAmount) * 100) / 100;
+    qrPaymentModal.hidden = true;
+
+    addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
+    announceSentPayment(roundedAmount);
+
+    scannedQRRecipient = null;
+});
+
+document.getElementById("qr-pay-cancel").addEventListener("click", function () {
+    qrPaymentModal.hidden = true;
+    qrPaymentAmount.value = "";
+    qrPaymentError.textContent = "";
+    scannedQRRecipient = null;
+});
 // SCAN QR BUTTON
 
 document.getElementById("scan-qr").addEventListener(
