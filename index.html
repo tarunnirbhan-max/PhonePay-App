@@ -556,6 +556,32 @@ if ("serviceWorker" in navigator) {
         </div>
     </div>
 </div>
+    <!-- QR PAYMENT POPUP -->
+<div id="qr-payment-modal" class="qr-payment-modal" hidden>
+    <div class="qr-payment-card">
+
+        <div class="qr-payment-check">✓</div>
+
+        <h2>Pay to: <span id="qr-payee-name"></span></h2>
+        <p id="qr-payee-upi"></p>
+
+        <label for="qr-payment-amount">Enter amount</label>
+
+        <input
+            type="number"
+            id="qr-payment-amount"
+            placeholder="₹ 0.00"
+            min="1"
+            step="0.01"
+        >
+
+        <p id="qr-payment-error"></p>
+
+        <button type="button" id="qr-pay-now">Pay Now</button>
+        <button type="button" id="qr-pay-cancel">Cancel</button>
+
+    </div>
+</div>
 <!-- SMS STYLE NOTIFICATION -->
 <div id="sms-notification" class="sms-notification" hidden>
     <div class="sms-notification-header">
