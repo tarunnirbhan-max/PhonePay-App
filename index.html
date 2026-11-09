@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta name="theme-color" content="#5f259f">
+
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <header class="top-header">
+        <div class="brand-logo">
+            <span class="logo-icon">₹</span>
+            <h1>PhonePe</h1>
+        </div>
+    </header>
+
+    <main id="home-screen" class="screen">
+        <!-- PROMOTIONAL BANNER -->
+<section class="promo-banner">
+    <div class="promo-content">
+        <h2>DHANTERAS SPECIAL</h2>
+        <h3>Flat 2% Cashback</h3>
+        <p>on 24K Gold</p>
+    </div>
+    <div class="promo-diya">🪔</div>
+</section>
+
+        <div class="welcome-row">
+            <div>
+                <p class="welcome">Welcome back 👋</p>
+                <h2>What would you like to do?</h2>
+            </div>
+            <div class="user-mini">U</div>
+        </div>
+
+        <!-- CHECK BANK BALANCE -->
+<section class="balance-card bank-balance-card">
+    <div class="balance-top">
+        <span>Bank Accounts</span>
+        <span class="wallet-symbol">▣</span>
+    </div>
+
+    <h2>Check your bank balance</h2>
+    <p>View your account balance securely</p>
+
+    <button type="button" id="check-bank-balance"
+        class="check-balance-button">
+        Check Balance →
+    </button>
+</section>
+
+        <section class="actions-section">
+            <h3>Money Transfers & Quick Actions</h3>
+            <div class="actions">
+                <button type="button" id="send-money" class="action-button">
+                    <span class="action-icon blue">↗</span>
+                    <span>Send Money</span>
+                </button>
+                <button type="button" id="receive-money" class="action-button">
+                    <span class="action-icon green">↙</span>
+                    <span>Receive Money</span>
+                </button>
+                <button type="button" id="open-history" class="action-button">
+                    <span class="action-icon orange">↻</span>
+                    <span>History</span>
+                </button>
+                <button type="button" id="open-qr" class="action-button">
+                    <span class="action-icon purple">▦</span>
+                    <span>My QR</span>
+                </button>
+                <button type="button" id="scan-qr" class="action-button">
+    <span class="action-icon green">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M3 8V5a2 2 0 0 1 2-2h3"/>
+        <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+        <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+        <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
+        <path d="M7 8v8M10 8v8M13 8v8M16 8v8"/>
+    </svg>
+</span>
+    <span>Scan QR</span>
+</button>
+            </div>
+        </section>
+
+        <section class="services-section">
+            <h3>Recharge & Bill Payments</h3>
+            <div class="service-grid">
+                <button type="button" class="service-item" id="mobile-recharge">
+                    <span class="service-icon mobile-icon">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round">
+        <rect x="6" y="2" width="12" height="20" rx="2"/>
+        <path d="M10 5h4"/>
+        <path d="M11 18h2"/>
+    </svg>
+</span>
+                    <span>Mobile Recharge</span>
+                </button>
+                <button type="button" class="service-item" id="electricity-payment">
+                    <span class="service-icon electricity-icon">ϟ</span>
+                    <span>Electricity</span>
+                </button>
+                <button type="button" class="service-item" id="dth-recharge">
+                    <span class="service-icon dth-icon">▤</span>
+                    <span>DTH Recharge</span>
+                </button>
+                <button type="button" class="service-item" id="gas-booking">
+                    <span class="service-icon gas-icon">♨</span>
+                    <span>Gas Cylinder</span>
+                </button>
+                <button type="button" class="service-item" id="water-payment">
+                    <span class="service-icon water-icon">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M12 2C12 2 5 10 5 15a7 7 0 0 0 14 0c0-5-7-13-7-13z"/>
+        <path d="M9 16a3 3 0 0 0 3 3"/>
+    </svg>
+</span>
+                    <span>Water Bill</span>
+                </button>
+                <button type="button" class="service-item" id="broadband-payment">
+                    <span class="service-icon broadband-icon">⌁</span>
+                    <span>Broadband</span>
+                </button>
+            </div>
+
+            <div id="service-form" class="service-form" hidden>
+                <div class="service-form-header">
+                    <h3 id="service-form-title">Mobile Recharge</h3>
+                    <button type="button" id="close-service-form">✕</button>
+                </div>
+                <form id="service-payment-form">
+                    <label id="service-number-label" for="service-number">Mobile Number</label>
+                    <input type="text" id="service-number"
+                        placeholder="Enter mobile number" required>
+
+                    <label for="service-provider">Operator / Provider</label>
+                    <select id="service-provider" required>
+                        <option value="">Select Provider</option>
+                    </select>
+
+                    <label for="service-amount">Amount (₹)</label>
+                    <input type="number" id="service-amount"
+                        placeholder="Enter amount" min="1" step="0.01" required>
+
+                    <button type="submit" class="primary-button">Continue</button>
+                    <small>Transaction processed successfully.</small>
+                </form>
+            </div>
+        </section>
+
+        <section class="recent-section">
+            <div class="section-title">
+                <h3>Recent Activity</h3>
+                <button type="button" id="view-all">View all</button>
+            </div>
+            <div id="recent-transactions" class="recent-list">
+                <div class="empty-state">
+                    <span>↻</span>
+                    <p>No recent activity</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- BANK BALANCE MODAL -->
+<div id="bank-balance-modal" class="auth-modal" hidden>
+
+    <div class="auth-card">
+
+        <button type="button" id="close-bank-modal"
+            class="auth-close">✕</button>
+
+        <!-- ACCOUNT SELECTION -->
+        <div id="bank-account-step">
+
+            <div class="auth-icon">▣</div>
+
+            <h2>Select Bank Account</h2>
+            <p class="auth-subtitle">
+                Choose an account to continue
+            </p>
+
+            <button type="button" id="select-bank-account"
+                class="bank-account-option">
+
+                <span class="bank-account-logo">SBI</span>
+
+                <span class="bank-account-info">
+                    <strong>State Bank of India</strong>
+                    <small> Savings Account •••• 8711</small>
+                </span>
+
+                <span class="bank-radio">◯</span>
+            </button>
+
+            <button type="button" id="continue-bank-balance"
+                class="auth-primary-button" disabled>
+                Continue
+            </button>
+
+        </div>
+
+        <!-- PASSCODE STEP -->
+        <div id="bank-passcode-step" hidden>
+
+            <div class="auth-icon">🔒</div>
+
+            <h2>Enter 4-digit Passcode</h2>
+
+            <p class="auth-subtitle">
+                Enter your local app passcode to continue
+            </p>
+
+            <input type="password"
+                id="bank-passcode"
+                class="passcode-input"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="••••"
+                autocomplete="off">
+
+            <p id="bank-passcode-error" class="auth-error"></p>
+
+            <button type="button" id="verify-bank-passcode"
+                class="auth-primary-button">
+                Continue
+            </button>
+
+        </div>
+
+        <!-- BALANCE RESULT -->
+        <div id="bank-balance-result" hidden>
+
+            <div class="auth-icon success-icon">✓</div>
+
+            <h2>Account Balance</h2>
+
+            <p class="auth-subtitle">
+                State Bank of India •••• 8711
+            </p>
+
+            <h1 id="bank-balance-amount">₹0.00</h1>
+
+            <button type="button" id="done-bank-balance"
+                class="auth-primary-button">
+                Done
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+    
+<!-- QR SCANNER SCREEN -->
+<section id="scanner-screen" class="screen secondary-screen" hidden>
+
+    <h2>Scan QR Code</h2>
+    <p class="screen-subtitle">Upload a QR image to scan</p>
+
+    <div id="qr-reader"></div>
+
+    <div id="scanned-recipient" hidden>
+        <p>Recipient</p>
+        <strong id="scanned-name"></strong>
+        <p id="scanned-upi"></p>
+    </div>
+
+    <p id="scan-result" role="status"></p>
+
+    <button type="button" id="close-scanner"
+        class="primary-button">
+        Back to Home
+    </button>
+
+</section>
+
+
+    <section id="history-screen" class="screen secondary-screen" hidden>
+    <h2>Transaction History</h2>
+    <p class="screen-subtitle">Your wallet activity</p>
+<div class="transaction-filter">
+    <select id="transaction-filter">
+        <option value="all">All Transactions</option>
+        <option value="debit">Money Sent</option>
+        <option value="credit">Money Received</option>
+    </select>
+</div>
+    <div class="transaction-search">
+        <input
+            type="search"
+            id="transaction-search"
+            placeholder="Search transactions..."
+        >
+    </div>
+
+    <div id="transaction-list" class="transaction-list">
+        <div class="empty-state">
+            <span>↻</span>
+            <p>No transactions yet.</p>
+        </div>
+    </div>
+</section>
+
+    <section id="qr-screen" class="screen secondary-screen" hidden>
+        <h2>My QR</h2>
+        <p class="screen-subtitle">Your personal wallet QR</p>
+
+        <div class="qr-card">
+            <div class="qr-profile">
+                <div class="qr-avatar">P</div>
+                <div>
+                    <h3>PhonePe Wallet</h3>
+                    <p>Personal Wallet</p>
+                </div>
+            </div>
+
+            <!-- ACTUAL SCANNABLE QR -->
+            <div class="qr-wrapper">
+                <div id="qr-code" class="qr-code-container"></div>
+                <div class="qr-center-logo">पे</div>
+            </div>
+
+            <h3 class="qr-name">PhonePe</h3>
+            <p class="qr-id">Wallet ID: <span id="wallet-id">tarun@phonepe</span></p>
+            <small>Scan to read virtual wallet ID</small>
+        </div>
+
+        <button type="button" id="share-qr" class="primary-button">
+            Copy Wallet ID
+        </button>
+        <button type="button" id="back-qr" class="primary-button">
+            Back to Home
+        </button>
+    </section>
+
+    <section id="profile-screen" class="screen secondary-screen" hidden>
+    <h2>My Profile</h2>
+    <p class="screen-subtitle">Account information</p>
+
+    <div class="profile-card">
+        <div class="profile-avatar">S</div>
+        <h3>Sidharth</h3>
+        <p>Wallet Account</p>
+    </div>
+
+    <div class="profile-details">
+        <div>
+            <span>Owner Name</span>
+            <strong>Sidharth</strong>
+        </div>
+
+        <div>
+            <span>Wallet ID</span>
+            <strong>sidharth@wallet</strong>
+        </div>
+
+        <div>
+            <span>Bank Name</span>
+            <strong>State Bank of India</strong>
+            <span class="bank-status">✓ Bank Details Added</span>
+        </div>
+
+        <div>
+            <span>Account Number</span>
+            <strong>•••••••7985</strong>
+        </div>
+
+        <div>
+            <span>Account Type</span>
+            <strong>Savings Account</strong>
+        </div>
+    </div>
+
+    <p class="simulator-note">
+        Bank details added to this profile.
+    </p>
+</section>
+
+    <nav class="bottom-nav">
+    <button type="button" id="nav-home" class="active">
+        <span class="nav-icon">⌂</span>
+        <span>Home</span>
+    </button>
+
+    <button type="button" id="nav-history">
+        <span class="nav-icon">↻</span>
+        <span>History</span>
+    </button>
+
+    <button type="button" id="nav-scan" class="nav-scan">
+        <span class="nav-scan-icon">▦</span>
+        <span>Scan</span>
+    </button>
+
+    <button type="button" id="nav-qr">
+        <span class="nav-icon">▣</span>
+        <span>My QR</span>
+    </button>
+
+    <button type="button" id="nav-profile">
+        <span class="nav-icon">♙</span>
+        <span>Profile</span>
+    </button>
+</nav>
+
+    <footer>Wallet Interface</footer>
+</div>
+
+
+<!-- TRANSACTION RECEIPT -->
+
+<div id="receipt-modal" class="receipt-modal" hidden>
+    <div class="receipt-card receipt-new">
+
+        <button id="close-receipt" class="receipt-close">✕</button>
+
+        <div class="receipt-success-header">
+            <div class="receipt-check">✓</div>
+            <h2>Transaction Successful</h2>
+            <p id="receipt-date">—</p>
+        </div>
+
+        <div class="receipt-main">
+
+            <div class="receipt-paid-to">
+                <p>Paid to</p>
+                <h2 id="receipt-type">—</h2>
+                <h1 id="receipt-amount">₹0</h1>
+            </div>
+
+            <div class="receipt-details">
+
+                <h3>Transfer Details</h3>
+
+                <p>Transaction ID
+                    <strong id="receipt-id">—</strong>
+                </p>
+
+                <div class="receipt-bank-row">
+    <div class="receipt-bank-info">
+        <p>Debit from</p>
+
+        <div class="receipt-bank-name">
+            <img src="sbi-logo.svg" alt="SBI Logo" class="sbi-logo">
+            <strong>State Bank of India</strong>
+        </div>
+
+        <small>Account •••••••8711</small>
+    </div>
+
+    <strong id="receipt-debit-amount">₹0</strong>
+</div>
+
+                <p>UTR No.
+                    <strong id="receipt-utr">—</strong>
+                </p>
+
+            </div>
+
+            <p class="receipt-virtual-note">
+                Payment receipt
+            </p>
+
+            <button type="button" id="download-receipt"
+                class="download-receipt">
+                Download Receipt
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- TRANSACTION DETAILS POPUP -->
+
+<div id="transaction-details-modal" class="receipt-modal" hidden>
+    <div class="receipt-card">
+        <button type="button" id="close-transaction-details"
+            class="receipt-close">✕</button>
+
+        <div class="receipt-check">✓</div>
+        <h2>Transaction Details</h2>
+        <p class="receipt-subtitle">Wallet transaction record</p>
+
+        <h1 id="detail-amount">₹0.00</h1>
+
+        <div class="receipt-details">
+    <h3>Transfer details</h3>
+
+    <p>Transaction Type
+        <strong id="detail-type">—</strong>
+    </p>
+
+    <p>Paysim Transaction ID
+        <strong id="detail-id">—</strong>
+    </p>
+
+    <p>Demo UTR
+        <strong id="detail-utr">—</strong>
+    </p>
+
+        <p>Date & Time
+        <strong id="detail-date">—</strong>
+    </p>
+
+    <p>Status
+        <strong id="detail-status">Simulated</strong>
+    </p>
+
+</div>
+</div>
+</div>
+
+<!-- QR CODE LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(registration => {
+                console.log("App is ready for offline use!");
+            })
+            .catch(error => {
+                console.error("Service Worker Error:", error);
+            });
+    });
+}
+</script>
+<!-- SEND MONEY POPUP -->
+<div id="payment-popup" hidden>
+    <div class="payment-popup-card">
+        <h3>Send Money</h3>
+
+        <input
+            type="number"
+            id="payment-amount-input"
+            placeholder="Enter amount (₹)"
+            min="1"
+            step="0.01"
+        >
+
+        <p id="payment-popup-message"></p>
+
+        <div class="payment-popup-actions">
+            <button type="button" id="payment-popup-cancel">Cancel</button>
+            <button type="button" id="payment-popup-confirm">Pay</button>
+        </div>
+    </div>
+</div>
+<!-- SMS STYLE NOTIFICATION -->
+<div id="sms-notification" class="sms-notification" hidden>
+    <div class="sms-notification-header">
+        <span>💬 Messages</span>
+        <span id="sms-time">Now</span>
+    </div>
+
+    <div class="sms-notification-body">
+        <strong>PhonePe</strong>
+        <p id="sms-message"></p>
+    </div>
+</div>
+<script src="../script.js"></script>
+</body>
+</html>
+
