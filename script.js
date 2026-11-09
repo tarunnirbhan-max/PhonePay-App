@@ -627,6 +627,7 @@ document.getElementById("back-qr").addEventListener("click", showHome);
 
 let isProcessingQR = false;
 
+
 async function openQRScanner() {
     showScreen(scannerScreen, navScan);
 
@@ -638,13 +639,21 @@ async function openQRScanner() {
     reader.replaceChildren();
     result.textContent = "";
 
+    // CAMERA BUTTON
+    const cameraButton = document.createElement("button");
+    cameraButton.textContent = "Open Camera";
+    cameraButton.className = "primary-button";
+    cameraButton.style.width = "100%";
+    cameraButton.style.marginTop = "15px";
+
+    // IMAGE UPLOAD BUTTON
     const uploadLabel = document.createElement("label");
     uploadLabel.textContent = "Choose QR Image";
     uploadLabel.className = "primary-button";
     uploadLabel.style.display = "block";
     uploadLabel.style.textAlign = "center";
+    uploadLabel.style.marginTop = "12px";
     uploadLabel.style.cursor = "pointer";
-    uploadLabel.style.marginTop = "15px";
 
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -652,8 +661,66 @@ async function openQRScanner() {
     fileInput.style.display = "none";
 
     uploadLabel.appendChild(fileInput);
-    reader.appendChild(uploadLabel);
 
+    reader.append(cameraButton, uploadLabel);
+
+    // LIVE CAMERA SCANNER
+    let html5QrCode = null;
+    let cameraResultHandled = false;
+
+    cameraButton.addEventListener("click", async function () {
+        try {
+            if (typeof Html5Qrcode === "undefined") {
+                result.textContent = "Camera scanner library not loaded.";
+                return;
+            }
+
+            cameraButton.disabled = true;
+            result.textContent = "Starting camera...";
+
+            const cameraContainer = document.createElement("div");
+            cameraContainer.id = "live-camera-reader";
+            cameraContainer.style.width = "100%";
+            cameraContainer.style.marginTop = "15px";
+
+            reader.appendChild(cameraContainer);
+
+            html5QrCode = new Html5Qrcode("live-camera-reader");
+
+            await html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                async function (decodedText) {
+    if (cameraResultHandled) return;
+    cameraResultHandled = true;
+
+    result.textContent = "QR scanned successfully!";
+
+    try {
+        await html5QrCode.stop();
+    } catch (error) {
+        console.log(error);
+    }
+
+    await handleQRScan(decodedText);
+},
+                function () {}
+            );
+
+            result.textContent = "Camera active. Scan a QR code.";
+
+        } catch (error) {
+            console.error("Camera error:", error);
+            result.textContent =
+                "Camera could not start. Please allow camera permission.";
+            cameraButton.disabled = false;
+        }
+    });
+
+    // QR IMAGE UPLOAD
     fileInput.addEventListener("change", async function () {
         const file = fileInput.files[0];
         if (!file) return;
@@ -667,131 +734,57 @@ async function openQRScanner() {
 
             let decodedText = null;
 
-            // FAST NATIVE QR SCANNER
-
             if ("BarcodeDetector" in window) {
                 try {
                     const detector = new BarcodeDetector({
                         formats: ["qr_code"]
                     });
 
-                    const detectedCodes = await detector.detect(bitmap);
+                    const codes = await detector.detect(bitmap);
 
-                    if (detectedCodes.length > 0) {
-                        decodedText = detectedCodes[0].rawValue;
+                    if (codes.length > 0) {
+                        decodedText = codes[0].rawValue;
                     }
                 } catch (error) {
-                    console.log("Native QR scanner unavailable:", error);
+                    console.log(error);
                 }
             }
 
-            // JSQR FALLBACK SCANNER
-
             if (!decodedText && typeof jsQR !== "undefined") {
+                const canvas = document.createElement("canvas");
+                canvas.width = bitmap.width;
+                canvas.height = bitmap.height;
 
-                const maxDimension = 2400;
+                const context = canvas.getContext("2d");
+                context.drawImage(bitmap, 0, 0);
 
-                const scale = Math.min(
-                    1,
-                    maxDimension / Math.max(bitmap.width, bitmap.height)
+                const imageData = context.getImageData(
+                    0, 0, canvas.width, canvas.height
                 );
 
-                const imageWidth = Math.round(bitmap.width * scale);
-                const imageHeight = Math.round(bitmap.height * scale);
+                const code = jsQR(
+                    imageData.data,
+                    imageData.width,
+                    imageData.height
+                );
 
-                const rotations = [0, 90, 180, 270];
-
-                const canvas = document.createElement("canvas");
-
-                const context = canvas.getContext("2d", {
-                    willReadFrequently: true
-                });
-
-                if (!context) {
-                    throw new Error("Canvas is not supported.");
-                }
-
-                for (const angle of rotations) {
-
-                    if (angle === 90 || angle === 270) {
-                        canvas.width = imageHeight;
-                        canvas.height = imageWidth;
-                    } else {
-                        canvas.width = imageWidth;
-                        canvas.height = imageHeight;
-                    }
-
-                    context.setTransform(1, 0, 0, 1, 0, 0);
-                    context.clearRect(
-                        0, 0,
-                        canvas.width,
-                        canvas.height
-                    );
-
-                    context.save();
-
-                    if (angle === 90) {
-                        context.translate(canvas.width, 0);
-                        context.rotate(Math.PI / 2);
-                    } else if (angle === 180) {
-                        context.translate(canvas.width, canvas.height);
-                        context.rotate(Math.PI);
-                    } else if (angle === 270) {
-                        context.translate(0, canvas.height);
-                        context.rotate(-Math.PI / 2);
-                    }
-
-                    context.drawImage(
-                        bitmap,
-                        0, 0,
-                        imageWidth,
-                        imageHeight
-                    );
-
-                    context.restore();
-
-                    const imageData = context.getImageData(
-                        0, 0,
-                        canvas.width,
-                        canvas.height
-                    );
-
-                    const code = jsQR(
-                        imageData.data,
-                        imageData.width,
-                        imageData.height,
-                        {
-                            inversionAttempts: "attemptBoth"
-                        }
-                    );
-
-                    if (code && code.data) {
-                        decodedText = code.data;
-                        break;
-                    }
-                }
+                if (code) decodedText = code.data;
             }
 
             if (!decodedText) {
-                result.textContent =
-                    "QR not detected. Please try another image.";
+                result.textContent = "QR not detected. Try another image.";
                 return;
             }
 
             result.textContent = "QR scanned successfully!";
-
             await handleQRScan(decodedText);
 
         } catch (error) {
-            console.error("QR scanning error:", error);
-
-            result.textContent =
-                "Unable to read this image. Try another image.";
+            console.error(error);
+            result.textContent = "Unable to read this image.";
 
         } finally {
-            if (bitmap) {
-                bitmap.close();
-            }
+            if (bitmap) bitmap.close();
         }
     });
 }
