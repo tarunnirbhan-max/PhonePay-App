@@ -627,20 +627,17 @@ document.getElementById("back-qr").addEventListener("click", showHome);
 
 let isProcessingQR = false;
 
-
 async function openQRScanner() {
     showScreen(scannerScreen, navScan);
 
     const reader = document.getElementById("qr-reader");
     const result = document.getElementById("scan-result");
 
-    if (!reader || !result) {
-        console.error("Scanner HTML elements are missing.");
-        return;
-    }
+    if (!reader || !result) return;
 
     reader.replaceChildren();
     result.textContent = "";
+
     const uploadLabel = document.createElement("label");
     uploadLabel.textContent = "Choose QR Image";
     uploadLabel.className = "primary-button";
@@ -662,7 +659,7 @@ async function openQRScanner() {
         if (!file) return;
 
         if (typeof jsQR === "undefined") {
-            result.textContent = "QR decoder library not loaded. Refresh the page.";
+            result.textContent = "QR decoder library not loaded.";
             return;
         }
 
@@ -672,33 +669,57 @@ async function openQRScanner() {
             const bitmap = await createImageBitmap(file);
 
             const canvas = document.createElement("canvas");
-            canvas.width = bitmap.width;
-            canvas.height = bitmap.height;
-
             const context = canvas.getContext("2d", {
                 willReadFrequently: true
             });
 
-            context.drawImage(bitmap, 0, 0);
+            const sizes = [1600, 1200, 800, 600];
+
+            let code = null;
+
+            for (const maxSize of sizes) {
+                const scale = Math.min(
+                    1,
+                    maxSize / Math.max(bitmap.width, bitmap.height)
+                );
+
+                canvas.width = Math.round(bitmap.width * scale);
+                canvas.height = Math.round(bitmap.height * scale);
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(
+                    bitmap,
+                    0, 0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                const imageData = context.getImageData(
+                    0, 0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                code = jsQR(
+                    imageData.data,
+                    imageData.width,
+                    imageData.height,
+                    { inversionAttempts: "attemptBoth" }
+                );
+
+                if (code) break;
+            }
+
             bitmap.close();
 
-            const imageData = context.getImageData(
-                0, 0, canvas.width, canvas.height
-            );
-
-            const code = jsQR(
-                imageData.data,
-                imageData.width,
-                imageData.height,
-                { inversionAttempts: "attemptBoth" }
-            );
-
             if (!code) {
-                result.textContent = "QR not detected. Try another image.";
+                result.textContent =
+                    "QR not detected. Please try a clearer QR image.";
                 return;
             }
 
             result.textContent = "QR scanned successfully!";
+
             await handleQRScan(code.data);
 
         } catch (error) {
@@ -708,7 +729,7 @@ async function openQRScanner() {
     });
 }
 
-// PROCESS SCANNED QR
+// PROCESS SCANNED UPI QR
 
 async function handleQRScan(decodedText) {
     if (isProcessingQR) return;
@@ -716,27 +737,47 @@ async function handleQRScan(decodedText) {
     isProcessingQR = true;
 
     try {
-        if (!decodedText.startsWith("upi://pay")) {
-            alert(
-                "QR content:\n" + decodedText +
-                "\n\nThis QR is not a supported UPI payment QR."
-            );
+        const qrText = String(decodedText || "").trim();
+
+        let qrURL;
+
+        try {
+            qrURL = new URL(qrText);
+        } catch (error) {
+            alert("Invalid QR Code. Unable to read payment details.");
             return;
         }
 
-        const params = new URL(decodedText).searchParams;
+        if (
+            qrURL.protocol.toLowerCase() !== "upi:" ||
+            qrURL.hostname.toLowerCase() !== "pay"
+        ) {
+            alert("This QR code is not a supported UPI payment QR.");
+            return;
+        }
 
-        const upiId = params.get("pa");
-        const name = params.get("pn") || upiId;
+        const params = new URLSearchParams(qrURL.search);
+
+        function getUPIParam(key) {
+            for (const [param, value] of params.entries()) {
+                if (param.toLowerCase() === key.toLowerCase()) {
+                    return value.trim();
+                }
+            }
+            return "";
+        }
+
+        const upiId = getUPIParam("pa");
+        const name = getUPIParam("pn") || upiId;
+
+        if (!upiId || !upiId.includes("@")) {
+            alert("Valid UPI ID not found in this QR.");
+            return;
+        }
+
         document.getElementById("scanned-name").textContent = name;
         document.getElementById("scanned-upi").textContent = upiId;
-
         document.getElementById("scanned-recipient").hidden = false;
-
-        if (!upiId) {
-            alert("Valid UPI ID not found in QR.");
-            return;
-        }
 
         const enteredAmount = prompt(
             "Pay to: " + name +
@@ -763,6 +804,7 @@ async function handleQRScan(decodedText) {
         alert(
             "Transaction completed!\n" +
             "Recipient: " + name +
+            "\nUPI ID: " + upiId +
             "\nAmount: " + formatMoney(amount)
         );
 
