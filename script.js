@@ -658,77 +658,142 @@ async function openQRScanner() {
         const file = fileInput.files[0];
         if (!file) return;
 
-        if (typeof jsQR === "undefined") {
-            result.textContent = "QR decoder library not loaded.";
-            return;
-        }
-
         result.textContent = "Scanning QR image...";
 
+        let bitmap = null;
+
         try {
-            const bitmap = await createImageBitmap(file);
+            bitmap = await createImageBitmap(file);
 
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d", {
-                willReadFrequently: true
-            });
+            let decodedText = null;
 
-            const sizes = [1600, 1200, 800, 600];
+            // NATIVE QR SCANNER
+            if ("BarcodeDetector" in window) {
+                try {
+                    const detector = new BarcodeDetector({
+                        formats: ["qr_code"]
+                    });
 
-            let code = null;
+                    const detectedCodes = await detector.detect(bitmap);
 
-            for (const maxSize of sizes) {
-                const scale = Math.min(
-                    1,
-                    maxSize / Math.max(bitmap.width, bitmap.height)
-                );
-
-                canvas.width = Math.round(bitmap.width * scale);
-                canvas.height = Math.round(bitmap.height * scale);
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(
-                    bitmap,
-                    0, 0,
-                    canvas.width,
-                    canvas.height
-                );
-
-                const imageData = context.getImageData(
-                    0, 0,
-                    canvas.width,
-                    canvas.height
-                );
-
-                code = jsQR(
-                    imageData.data,
-                    imageData.width,
-                    imageData.height,
-                    { inversionAttempts: "attemptBoth" }
-                );
-
-                if (code) break;
+                    if (detectedCodes.length > 0) {
+                        decodedText = detectedCodes[0].rawValue;
+                    }
+                } catch (error) {
+                    console.log("Native scanner unavailable:", error);
+                }
             }
 
-            bitmap.close();
+            // JSQR FALLBACK
+            if (!decodedText && typeof jsQR !== "undefined") {
 
-            if (!code) {
+                const maxDimension = 2400;
+
+                const scale = Math.min(
+                    1,
+                    maxDimension / Math.max(bitmap.width, bitmap.height)
+                );
+
+                const imageWidth = Math.round(bitmap.width * scale);
+                const imageHeight = Math.round(bitmap.height * scale);
+
+                const rotations = [0, 90, 180, 270];
+
+                const canvas = document.createElement("canvas");
+
+                const context = canvas.getContext("2d", {
+                    willReadFrequently: true
+                });
+
+                if (!context) {
+                    throw new Error("Canvas is not supported.");
+                }
+
+                for (const angle of rotations) {
+
+                    if (angle === 90 || angle === 270) {
+                        canvas.width = imageHeight;
+                        canvas.height = imageWidth;
+                    } else {
+                        canvas.width = imageWidth;
+                        canvas.height = imageHeight;
+                    }
+
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+
+                    context.clearRect(
+                        0, 0,
+                        canvas.width,
+                        canvas.height
+                    );
+
+                    context.save();
+
+                    if (angle === 90) {
+                        context.translate(canvas.width, 0);
+                        context.rotate(Math.PI / 2);
+                    } else if (angle === 180) {
+                        context.translate(canvas.width, canvas.height);
+                        context.rotate(Math.PI);
+                    } else if (angle === 270) {
+                        context.translate(0, canvas.height);
+                        context.rotate(-Math.PI / 2);
+                    }
+
+                    context.drawImage(
+                        bitmap,
+                        0, 0,
+                        imageWidth,
+                        imageHeight
+                    );
+
+                    context.restore();
+
+                    const imageData = context.getImageData(
+                        0, 0,
+                        canvas.width,
+                        canvas.height
+                    );
+
+                    const code = jsQR(
+                        imageData.data,
+                        imageData.width,
+                        imageData.height,
+                        {
+                            inversionAttempts: "attemptBoth"
+                        }
+                    );
+
+                    if (code && code.data) {
+                        decodedText = code.data;
+                        break;
+                    }
+                }
+            }
+
+            if (!decodedText) {
                 result.textContent =
-                    "QR not detected. Please try a clearer QR image.";
+                    "QR not detected. Please try another image.";
                 return;
             }
 
             result.textContent = "QR scanned successfully!";
 
-            await handleQRScan(code.data);
+            await handleQRScan(decodedText);
 
         } catch (error) {
-            console.error("QR image scanning error:", error);
-            result.textContent = "Unable to read this image.";
+            console.error("QR scanning error:", error);
+
+            result.textContent =
+                "Unable to read this image. Try another image.";
+
+        } finally {
+            if (bitmap) {
+                bitmap.close();
+            }
         }
     });
 }
-
 // PROCESS SCANNED UPI QR
 
 async function handleQRScan(decodedText) {
