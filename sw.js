@@ -1,10 +1,12 @@
-const CACHE_NAME = "phonepe-app-v1";
+
+const CACHE_NAME = "phonepe-app-v2";
 
 const FILES_TO_CACHE = [
+    "./",
     "./index.html",
     "./manifest.json",
-    "../style.css",
-    "../script.js"
+    "./style.css",
+    "./script.js"
 ];
 
 // INSTALL
@@ -27,10 +29,8 @@ self.addEventListener("activate", event => {
                     .filter(key => key !== CACHE_NAME)
                     .map(key => caches.delete(key))
             );
-        })
+        }).then(() => self.clients.claim())
     );
-
-    self.clients.claim();
 });
 
 // FETCH
