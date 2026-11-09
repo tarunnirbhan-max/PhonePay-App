@@ -1949,3 +1949,113 @@ footer {
         width: calc(100% - 20px);
     }
 }
+/* QR PAYMENT POPUP - FIXED */
+
+.qr-payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    z-index: 200000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.75);
+    overflow-y: auto;
+}
+
+.qr-payment-modal[hidden] {
+    display: none !important;
+}
+
+.qr-payment-card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    margin: auto;
+    padding: 25px 22px;
+    box-sizing: border-box;
+    border: 1px solid #49305f;
+    border-radius: 22px;
+    background: #21172c;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 15px 45px rgba(0,0,0,.5);
+}
+
+.qr-payment-check {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 18px;
+    border: 3px solid #bd82ff;
+    border-radius: 50%;
+    color: #d5a5ff;
+    font-size: 38px;
+    line-height: 54px;
+}
+
+.qr-payment-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+}
+
+.qr-payment-card > p {
+    color: #d0c4dc;
+    overflow-wrap: anywhere;
+}
+
+.qr-payment-card label {
+    display: block;
+    margin: 22px 0 10px;
+    color: #c58aff;
+    text-align: left;
+    font-weight: 600;
+}
+
+#qr-payment-amount {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #8152a8;
+    border-radius: 12px;
+    background: #17111f;
+    color: white;
+    font-size: 20px;
+    box-sizing: border-box;
+}
+
+#qr-payment-error {
+    color: #ff8585;
+    font-size: 13px;
+    text-align: left;
+}
+
+#qr-pay-now,
+#qr-pay-cancel {
+    width: 100%;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#qr-pay-now {
+    border: none;
+    background: #6524a5;
+    color: white;
+}
+
+#qr-pay-cancel {
+    border: 1px solid #51445e;
+    background: #17111f;
+    color: #d5a5ff;
+}
