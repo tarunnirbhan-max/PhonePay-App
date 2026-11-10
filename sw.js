@@ -2,7 +2,6 @@ const CACHE_NAME = "phonepe-app-v4";
 
 const FILES_TO_CACHE = [
     "./",
-    "./index.html",
     "./manifest.json",
     "./style.css",
     "./script.js"

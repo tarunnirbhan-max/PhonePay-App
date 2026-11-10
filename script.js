@@ -43,22 +43,26 @@ const historyScreen = document.getElementById("history-screen");
 const qrScreen = document.getElementById("qr-screen");
 const profileScreen = document.getElementById("profile-screen");
 const scannerScreen = document.getElementById("scanner-screen");
+const searchScreen = document.getElementById("search-screen");
+const alertsScreen = document.getElementById("alerts-screen");
 
 const transactionList = document.getElementById("transaction-list");
 const recentTransactions = document.getElementById("recent-transactions");
 
 const navHome = document.getElementById("nav-home");
+const navSearch = document.getElementById("nav-search");
 const navHistory = document.getElementById("nav-history");
 const navScan = document.getElementById("nav-scan");
-const navQR = document.getElementById("nav-qr");
-const navProfile = document.getElementById("nav-profile");
+const navAlerts = document.getElementById("nav-alerts");
 
 const screens = [
     homeScreen,
     historyScreen,
     qrScreen,
     profileScreen,
-    scannerScreen
+    scannerScreen,
+    searchScreen,
+    alertsScreen
 ];
 
 // MONEY FORMAT
@@ -174,11 +178,15 @@ doneBankBalanceButton.addEventListener("click", function () {
 // NAVIGATION
 
 function setActiveNav(button) {
-    [navHome, navHistory, navScan, navQR, navProfile].forEach(function (item) {
-        item.classList.remove("active");
+    [navHome, navSearch, navHistory, navScan, navAlerts].forEach(function (item) {
+        if (item) {
+            item.classList.remove("active");
+        }
     });
 
-    button.classList.add("active");
+    if (button) {
+        button.classList.add("active");
+    }
 }
 
 function showScreen(screen, activeButton) {
@@ -200,6 +208,19 @@ function showScreen(screen, activeButton) {
 function showHome() {
     showScreen(homeScreen, navHome);
 }
+function showSearch() {
+    showScreen(searchScreen, navSearch);
+
+    const searchInput = document.getElementById("app-search-input");
+
+    if (searchInput) {
+        searchInput.focus();
+    }
+}
+
+function showAlerts() {
+    showScreen(alertsScreen, navAlerts);
+}
 
 function showHistory() {
     renderHistory();
@@ -207,11 +228,100 @@ function showHistory() {
 }
 
 function showQR() {
-    showScreen(qrScreen, navQR);
+    generateQRPattern();
+    showScreen(qrScreen, navHome);
 }
 
 function showProfile() {
-    showScreen(profileScreen, navProfile);
+    showScreen(profileScreen, navHome);
+}
+
+// FULL APP SEARCH
+
+
+const appSearchItems = [
+    { name: "To Phone Number", keywords: "send money mobile transfer", id: "send-money", category: "Money Transfer", icon: "📱" },
+    { name: "To Bank & Self A/c", keywords: "bank account transfer", id: "receive-money", category: "Money Transfer", icon: "🏦" },
+    { name: "Check Bank Balance", keywords: "bank balance account", id: "check-bank-balance", category: "Banking", icon: "💳" },
+    { name: "Mobile Recharge", keywords: "mobile phone recharge prepaid", id: "mobile-recharge", category: "Recharge & Bills", icon: "📲" },
+    { name: "Electricity", keywords: "electricity light power bill", id: "electricity-payment", category: "Recharge & Bills", icon: "💡" },
+    { name: "DTH Recharge", keywords: "tv dish recharge", id: "dth-recharge", category: "Recharge & Bills", icon: "📺" },
+    { name: "Gas Cylinder", keywords: "gas booking lpg cylinder", id: "gas-booking", category: "Recharge & Bills", icon: "🔥" },
+    { name: "Water Bill", keywords: "water payment bill", id: "water-payment", category: "Recharge & Bills", icon: "💧" },
+    { name: "Broadband", keywords: "wifi internet broadband", id: "broadband-payment", category: "Recharge & Bills", icon: "🌐" },
+    { name: "My QR", keywords: "qr code receive payment", id: "open-qr", category: "Payments", icon: "▦" },
+    { name: "Transaction History", keywords: "history transactions activity", id: "open-history", category: "Payments", icon: "📋" }
+];
+
+const appSearchInput = document.getElementById("app-search-input");
+const appSearchResults = document.getElementById("app-search-results");
+
+function renderAppSearch(query = "") {
+    const searchText = query.toLowerCase().trim();
+
+    const results = appSearchItems.filter(function(item) {
+        return (item.name + " " + item.keywords + " " + item.category)
+            .toLowerCase()
+            .includes(searchText);
+    });
+
+    appSearchResults.innerHTML = "";
+
+    if (results.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "No results found.";
+        appSearchResults.appendChild(empty);
+        return;
+    }
+
+    results.forEach(function(item) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "app-search-result";
+
+        const icon = document.createElement("span");
+        icon.className = "search-result-icon";
+        icon.textContent = item.icon;
+
+        const details = document.createElement("span");
+        details.className = "search-result-details";
+
+        const title = document.createElement("strong");
+        title.textContent = item.name;
+
+        const category = document.createElement("small");
+        category.textContent = item.category;
+
+        details.appendChild(title);
+        details.appendChild(category);
+        button.appendChild(icon);
+        button.appendChild(details);
+
+        button.addEventListener("click", function() {
+            const target = document.getElementById(item.id);
+
+            if (!target) {
+                console.error("Search target not found:", item.id);
+                return;
+            }
+
+            appSearchInput.value = "";
+            renderAppSearch("");
+
+            target.click();
+        });
+
+        appSearchResults.appendChild(button);
+    });
+}
+
+if (appSearchInput && appSearchResults) {
+    appSearchInput.addEventListener("input", function() {
+        renderAppSearch(this.value);
+    });
+
+    renderAppSearch();
 }
 
 // TRANSACTION ROW
@@ -988,10 +1098,11 @@ document.getElementById("qr-pay-cancel").addEventListener("click", function () {
 });
 // SCAN QR BUTTON
 
-document.getElementById("scan-qr").addEventListener(
-    "click",
-    openQRScanner
-);
+const scanQRButton = document.getElementById("scan-qr");
+
+if (scanQRButton) {
+    scanQRButton.addEventListener("click", openQRScanner);
+}
 
 // CLOSE SCANNER
 
@@ -1006,10 +1117,10 @@ document.getElementById("close-scanner").addEventListener(
 // BOTTOM NAVIGATION
 
 navHome.addEventListener("click", showHome);
-navHistory.addEventListener("click", showHistory);
+navSearch.addEventListener("click", showSearch);
 navScan.addEventListener("click", openQRScanner);
-navQR.addEventListener("click", showQR);
-navProfile.addEventListener("click", showProfile);
+navHistory.addEventListener("click", showHistory);
+navAlerts.addEventListener("click", showAlerts);
 
 // INITIAL DISPLAY
 

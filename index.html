@@ -17,27 +17,69 @@
 <div class="app-container">
 
     <header class="top-header">
-        <div class="brand-logo">
-            <span class="logo-icon">₹</span>
-            <h1>PhonePe</h1>
-        </div>
-    </header>
+    <div class="brand-logo">
+        <span class="logo-icon">पे</span>
+        <h1>PhonePe</h1>
+    </div>
+
+    <div class="header-actions">
+        <button type="button" class="header-notification"
+                aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="23" height="23"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                <path d="M10 21h4"/>
+            </svg>
+        </button>
+
+        <button type="button" class="header-profile"
+        aria-label="Profile">
+    <svg viewBox="0 0 24 24" width="23" height="23"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21a8 8 0 0 1 16 0"/>
+    </svg>
+</button>
+    </div>
+</header>
 
     <main id="home-screen" class="screen">
         
         <div class="welcome-row">
-            <div>
-                <p class="welcome">Welcome back 👋</p>
-                <h2>What would you like to do?</h2>
-            </div>
-            <div class="user-mini">U</div>
-        </div>
+    <div class="welcome-content">
+        <p class="welcome">Welcome back 👋</p>
+        <h2>What would you like to do?</h2>
+        <span class="welcome-subtitle">Your payments, all in one place.</span>
+    </div>
 
+ <div class="user-mini">
+    <svg viewBox="0 0 24 24" width="25" height="25"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21a8 8 0 0 1 16 0"/>
+    </svg>
+</div>
+</div>
         <!-- CHECK BANK BALANCE -->
 <section class="balance-card bank-balance-card">
     <div class="balance-top">
         <span>Bank Accounts</span>
-        <span class="wallet-symbol">▣</span>
+       <span class="wallet-symbol">
+    <svg viewBox="0 0 24 24" width="24" height="24"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M3 9h18L12 3 3 9z"/>
+        <path d="M5 10v8M9 10v8M15 10v8M19 10v8"/>
+        <path d="M3 20h18M2 22h20"/>
+    </svg>
+</span>
     </div>
 
     <h2>Check your bank balance</h2>
@@ -53,37 +95,58 @@
             <h3>Money Transfers & Quick Actions</h3>
             <div class="actions">
                 <button type="button" id="send-money" class="action-button">
-                    <span class="action-icon blue">↗</span>
-                    <span>Send Money</span>
+                    <span class="action-icon blue">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <rect x="6" y="2" width="12" height="20" rx="2"/>
+        <path d="M10 5h4M11 18h2"/>
+    </svg>
+</span>
+                    <span>To Phone<br>Number</span>
                 </button>
                 <button type="button" id="receive-money" class="action-button">
-                    <span class="action-icon green">↙</span>
-                    <span>Receive Money</span>
+                    <span class="action-icon green">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M3 9h18L12 3 3 9z"/>
+        <path d="M5 10v8M9 10v8M15 10v8M19 10v8"/>
+        <path d="M3 20h18M2 22h20"/>
+    </svg>
+</span>
+                    <span>To Bank<br>&amp; Self A/c</span>
                 </button>
                 <button type="button" id="open-history" class="action-button">
-                    <span class="action-icon orange">↻</span>
+                    <span class="action-icon orange">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 7v5l3 2"/>
+        <path d="M3 4v4h4"/>
+    </svg>
+</span>
                     <span>History</span>
                 </button>
                 <button type="button" id="open-qr" class="action-button">
-                    <span class="action-icon purple">▦</span>
-                    <span>My QR</span>
-                </button>
-                <button type="button" id="scan-qr" class="action-button">
-    <span class="action-icon green">
-    <svg viewBox="0 0 24 24" width="26" height="26"
+                    <span class="action-icon purple">
+    <svg viewBox="0 0 24 24" width="25" height="25"
          fill="none" stroke="currentColor"
          stroke-width="2" stroke-linecap="round"
          stroke-linejoin="round">
-        <path d="M3 8V5a2 2 0 0 1 2-2h3"/>
-        <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
-        <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
-        <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
-        <path d="M7 8v8M10 8v8M13 8v8M16 8v8"/>
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <path d="M14 14h3v3h-3zM20 14v2M14 20h2M19 19h2v2h-2z"/>
     </svg>
 </span>
-    <span>Scan QR</span>
-</button>
-            </div>
+                    <span>My QR</span>
+                </button>
+                           </div>
         </section>
 
         <section class="services-section">
@@ -103,15 +166,47 @@
                     <span>Mobile Recharge</span>
                 </button>
                 <button type="button" class="service-item" id="electricity-payment">
-                    <span class="service-icon electricity-icon">ϟ</span>
-                    <span>Electricity</span>
-                </button>
-                <button type="button" class="service-item" id="dth-recharge">
-                    <span class="service-icon dth-icon">▤</span>
-                    <span>DTH Recharge</span>
-                </button>
+    <span class="service-icon electricity-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26"
+             fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M9 18h6M10 21h4"/>
+            <path d="M9 15.5a7 7 0 1 1 6 0c-.8.6-1 1.5-1 2.5h-4c0-1-.2-1.9-1-2.5z"/>
+            <path d="M12 5v2M7 10h2M15 10h2"/>
+        </svg>
+    </span>
+    <span>Electricity</span>
+</button>
+                
+
+<button type="button" class="service-item" id="dth-recharge">
+    <span class="service-icon dth-icon">
+    <svg viewBox="0 0 24 24" width="28" height="28"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="13" rx="2"/>
+        <path d="M8 22h8M12 18v4"/>
+        <path d="m9 2 3 3 3-3"/>
+        <circle cx="17" cy="15" r=".6" fill="currentColor"/>
+    </svg>
+</span>
+    <span>DTH Recharge</span>
+</button>
                 <button type="button" class="service-item" id="gas-booking">
-                    <span class="service-icon gas-icon">♨</span>
+                    <span class="service-icon gas-icon">
+    <svg viewBox="0 0 24 24" width="28" height="28"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M9 5V3h6v2"/>
+        <path d="M10 3V2h4v1"/>
+        <path d="M8 6h8"/>
+        <path d="M7 8 Q7 6 9 6 H15 Q17 6 17 8 V19 Q17 22 14 22 H10 Q7 22 7 19 Z"/>
+        <path d="M9 11h6M9 15h6"/>
+    </svg>
+</span>
                     <span>Gas Cylinder</span>
                 </button>
                 <button type="button" class="service-item" id="water-payment">
@@ -127,7 +222,20 @@
                     <span>Water Bill</span>
                 </button>
                 <button type="button" class="service-item" id="broadband-payment">
-                    <span class="service-icon broadband-icon">⌁</span>
+                    <span class="service-icon broadband-icon">
+    <svg viewBox="0 0 24 24" width="28" height="28"
+     fill="none" stroke="currentColor"
+     stroke-width="1.8" stroke-linecap="round"
+     stroke-linejoin="round">
+    <rect x="3" y="14" width="18" height="7" rx="2"/>
+    <path d="M6 14 4 5"/>
+    <path d="M18 14 20 5"/>
+    <path d="M8 9a6 6 0 0 1 8 0"/>
+    <path d="M10 11a3 3 0 0 1 4 0"/>
+    <circle cx="7" cy="17.5" r=".7" fill="currentColor"/>
+    <circle cx="11" cy="17.5" r=".7" fill="currentColor"/>
+</svg>
+</span>
                     <span>Broadband</span>
                 </button>
             </div>
@@ -385,32 +493,117 @@
     </p>
 </section>
 
-    <nav class="bottom-nav">
+ <section id="search-screen" class="screen" hidden>
+
+    <div class="screen-header">
+        <h2>Search</h2>
+    </div>
+
+    <div class="search-box">
+        <span>⌕</span>
+        <input
+            type="search"
+            id="app-search-input"
+            placeholder="Search services, payments and more"
+        >
+    </div>
+
+    <div id="app-search-results"></div>
+
+</section>   
+<!-- ALERTS SCREEN -->
+
+<section id="alerts-screen" class="screen secondary-screen" hidden>
+
+    <h2>Alerts</h2>
+    <p class="screen-subtitle">Your notifications and payment updates</p>
+
+    <div id="alerts-list">
+        <div class="empty-state">
+            <span>♧</span>
+            <p>You're all caught up!</p>
+            <small>No new notifications</small>
+        </div>
+    </div>
+
+</section>
+<nav class="bottom-nav">
+
     <button type="button" id="nav-home" class="active">
-        <span class="nav-icon">⌂</span>
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="m3 10 9-7 9 7"/>
+                <path d="M5 9v12h14V9"/>
+                <path d="M9 21v-7h6v7"/>
+            </svg>
+        </span>
         <span>Home</span>
     </button>
 
-    <button type="button" id="nav-history">
-        <span class="nav-icon">↻</span>
-        <span>History</span>
+    <button type="button" id="nav-search">
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="m16 16 5 5"/>
+            </svg>
+        </span>
+        <span>Search</span>
     </button>
 
     <button type="button" id="nav-scan" class="nav-scan">
-        <span class="nav-scan-icon">▦</span>
+        <span class="nav-scan-icon">
+            <svg viewBox="0 0 24 24" width="26" height="26"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M3 8V5a2 2 0 0 1 2-2h3"/>
+                <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+                <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+                <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
+                <rect x="7" y="7" width="4" height="4" rx="0.5"/>
+                <rect x="15" y="7" width="2" height="2"/>
+                <rect x="7" y="15" width="2" height="2"/>
+                <path d="M15 15h2v2h-2z"/>
+                <path d="M18 18h1"/>
+            </svg>
+        </span>
         <span>Scan</span>
     </button>
 
-    <button type="button" id="nav-qr">
-        <span class="nav-icon">▣</span>
-        <span>My QR</span>
+    <button type="button" id="nav-alerts">
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                <path d="M10 21h4"/>
+            </svg>
+        </span>
+        <span>Alerts</span>
     </button>
 
-    <button type="button" id="nav-profile">
-        <span class="nav-icon">♙</span>
-        <span>Profile</span>
+    <button type="button" id="nav-history">
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 2"/>
+                <path d="M3 4v4h4"/>
+            </svg>
+        </span>
+        <span>History</span>
     </button>
+
 </nav>
+
 
     <footer>Wallet Interface</footer>
 </div>
@@ -537,43 +730,75 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
-<!-- SEND MONEY POPUP -->
-<div id="payment-popup" hidden>
-    <div class="payment-popup-card">
-        <h3>Send Money</h3>
 
-        <!-- STEP 1: MOBILE NUMBER -->
-        <div id="send-mobile-step">
-            <label for="send-mobile-input">Enter Mobile Number</label>
-            <input
-                type="tel"
-                id="send-mobile-input"
-                placeholder="Enter 10-digit mobile number"
-                maxlength="10"
-                inputmode="numeric"
-                autocomplete="tel"
-            >
+<!-- SEND MONEY POPUP -->
+<div id="payment-popup" class="payment-popup-overlay" hidden>
+    <div class="payment-popup-card">
+
+        <div class="payment-popup-header">
+            <div>
+                <h3>Send Money</h3>
+                <p>To mobile number</p>
+            </div>
+            <button type="button" id="payment-popup-cancel"
+                class="payment-popup-close" aria-label="Close">✕</button>
         </div>
 
-        <!-- STEP 2: AMOUNT -->
+        <div id="send-mobile-step">
+            <div class="payment-recipient-icon">📱</div>
+
+            <h4>Enter recipient details</h4>
+            <p class="payment-popup-subtitle">
+                Enter the mobile number to continue
+            </p>
+
+            <label for="send-mobile-input">Mobile Number</label>
+
+            <div class="mobile-input-group">
+                <span class="country-code">🇮🇳 +91</span>
+                <input
+                    type="tel"
+                    id="send-mobile-input"
+                    placeholder="10-digit mobile number"
+                    maxlength="10"
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                >
+            </div>
+        </div>
+
         <div id="payment-amount-step" hidden>
+            <div class="payment-recipient-icon">₹</div>
+            <h4>Enter amount</h4>
+            <p class="payment-popup-subtitle">
+                Enter the amount you want to send
+            </p>
+
+            <label for="payment-amount-input">Amount (₹)</label>
             <input
                 type="number"
                 id="payment-amount-input"
-                placeholder="Enter amount (₹)"
+                placeholder="₹ 0.00"
                 min="1"
                 step="0.01"
             >
         </div>
 
-        <p id="payment-popup-message"></p>
+        <p id="payment-popup-message" role="status"></p>
 
         <div class="payment-popup-actions">
-            <button type="button" id="payment-popup-cancel">Cancel</button>
-            <button type="button" id="payment-popup-confirm">Continue</button>
+            <button type="button" id="payment-popup-confirm">
+                Continue
+            </button>
         </div>
+
+        <p class="payment-popup-secure">
+            <span>✓</span> Secure payment experience
+        </p>
+
     </div>
 </div>
+
 
 <!-- QR PAYMENT POPUP -->
 <div id="qr-payment-modal" class="qr-payment-modal" hidden>
