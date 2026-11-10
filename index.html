@@ -536,27 +536,45 @@ if ("serviceWorker" in navigator) {
     });
 }
 </script>
+
 <!-- SEND MONEY POPUP -->
 <div id="payment-popup" hidden>
     <div class="payment-popup-card">
         <h3>Send Money</h3>
 
-        <input
-            type="number"
-            id="payment-amount-input"
-            placeholder="Enter amount (₹)"
-            min="1"
-            step="0.01"
-        >
+        <!-- STEP 1: MOBILE NUMBER -->
+        <div id="send-mobile-step">
+            <label for="send-mobile-input">Enter Mobile Number</label>
+            <input
+                type="tel"
+                id="send-mobile-input"
+                placeholder="Enter 10-digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+            >
+        </div>
+
+        <!-- STEP 2: AMOUNT -->
+        <div id="payment-amount-step" hidden>
+            <input
+                type="number"
+                id="payment-amount-input"
+                placeholder="Enter amount (₹)"
+                min="1"
+                step="0.01"
+            >
+        </div>
 
         <p id="payment-popup-message"></p>
 
         <div class="payment-popup-actions">
             <button type="button" id="payment-popup-cancel">Cancel</button>
-            <button type="button" id="payment-popup-confirm">Pay</button>
+            <button type="button" id="payment-popup-confirm">Continue</button>
         </div>
     </div>
 </div>
+
 <!-- QR PAYMENT POPUP -->
 <div id="qr-payment-modal" class="qr-payment-modal" hidden>
     <div class="qr-payment-card">

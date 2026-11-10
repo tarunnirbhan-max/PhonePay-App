@@ -510,41 +510,112 @@ function announceSentPayment(amount) {
 
     window.speechSynthesis.speak(message);
 }
+
 // SEND AND RECEIVE MONEY - CUSTOM POPUP
 
 const paymentPopup = document.getElementById("payment-popup");
 const paymentAmountInput = document.getElementById("payment-amount-input");
 const paymentPopupMessage = document.getElementById("payment-popup-message");
 
+const sendMobileStep = document.getElementById("send-mobile-step");
+const paymentAmountStep = document.getElementById("payment-amount-step");
+const sendMobileInput = document.getElementById("send-mobile-input");
+
+const paymentConfirmButton = document.getElementById("payment-popup-confirm");
+
 let paymentMode = "send";
+let sendMobileStepActive = true;
+let recipientMobile = "";
+
+// OPEN SEND MONEY
 
 document.getElementById("send-money").addEventListener("click", function () {
     paymentMode = "send";
-    paymentPopup.querySelector("h3").textContent = "Send Money";
-    document.getElementById("payment-popup-confirm").textContent = "Pay";
+    sendMobileStepActive = true;
+    recipientMobile = "";
 
+    paymentPopup.querySelector("h3").textContent = "Send Money";
+
+    sendMobileStep.hidden = false;
+    paymentAmountStep.hidden = true;
+
+    sendMobileInput.value = "";
     paymentAmountInput.value = "";
     paymentPopupMessage.textContent = "";
+
+    paymentConfirmButton.textContent = "Continue";
+
     paymentPopup.hidden = false;
-    paymentAmountInput.focus();
+    sendMobileInput.focus();
 });
+
+// OPEN RECEIVE MONEY
 
 document.getElementById("receive-money").addEventListener("click", function () {
     paymentMode = "receive";
+    sendMobileStepActive = false;
+
     paymentPopup.querySelector("h3").textContent = "Receive Money";
-    document.getElementById("payment-popup-confirm").textContent = "Receive";
+
+    sendMobileStep.hidden = true;
+    paymentAmountStep.hidden = false;
 
     paymentAmountInput.value = "";
     paymentPopupMessage.textContent = "";
+
+    paymentConfirmButton.textContent = "Receive";
+
     paymentPopup.hidden = false;
     paymentAmountInput.focus();
 });
 
-document.getElementById("payment-popup-cancel").addEventListener("click", function () {
-    paymentPopup.hidden = true;
+// MOBILE NUMBER INPUT
+
+sendMobileInput.addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 10);
+    paymentPopupMessage.textContent = "";
 });
 
-document.getElementById("payment-popup-confirm").addEventListener("click", function () {
+// CANCEL POPUP
+
+document.getElementById("payment-popup-cancel").addEventListener("click", function () {
+    paymentPopup.hidden = true;
+    sendMobileInput.value = "";
+    paymentAmountInput.value = "";
+    paymentPopupMessage.textContent = "";
+    recipientMobile = "";
+});
+
+// CONFIRM BUTTON
+
+paymentConfirmButton.addEventListener("click", function () {
+
+    // FIRST STEP: VALIDATE MOBILE NUMBER
+
+    if (paymentMode === "send" && sendMobileStepActive) {
+
+        const mobile = sendMobileInput.value.trim();
+
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            paymentPopupMessage.textContent =
+                "Please enter a valid 10-digit mobile number.";
+            return;
+        }
+
+        recipientMobile = mobile;
+        sendMobileStepActive = false;
+
+        sendMobileStep.hidden = true;
+        paymentAmountStep.hidden = false;
+
+        paymentPopupMessage.textContent = "";
+        paymentConfirmButton.textContent = "Pay";
+
+        paymentAmountInput.focus();
+        return;
+    }
+
+    // SECOND STEP: AMOUNT
 
     const enteredAmount = paymentAmountInput.value.trim();
     const amount = Number(enteredAmount);
@@ -562,17 +633,34 @@ document.getElementById("payment-popup-confirm").addEventListener("click", funct
     }
 
     if (paymentMode === "send") {
+
         balance = Math.round((balance - roundedAmount) * 100) / 100;
+
         paymentPopup.hidden = true;
-        addTransaction("Money Sent", roundedAmount, "debit");
+
+        addTransaction(
+            "Money Sent",
+            roundedAmount,
+            "debit",
+            "Mobile: " + recipientMobile
+        );
+
         announceSentPayment(roundedAmount);
+
+        recipientMobile = "";
+
     } else {
+
         balance = Math.round((balance + roundedAmount) * 100) / 100;
+
         paymentPopup.hidden = true;
+
         addTransaction("Money Received", roundedAmount, "credit");
+
         announcePayment(roundedAmount);
     }
 });
+
 
 // WALLET ID
 
