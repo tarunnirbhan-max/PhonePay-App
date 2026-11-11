@@ -1,8 +1,8 @@
 
 // SAVED WALLET DATA
 
-const oldBalanceKey = "phonepe" + "DemoBalance";
-const oldTransactionsKey = "phonepe" + "DemoTransactions";
+const oldBalanceKey = "phonepe" + "Balance";
+const oldTransactionsKey = "phonepe" + "Transactions";
 
 let savedBalance = localStorage.getItem("phonepeBalance");
 
