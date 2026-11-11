@@ -3025,48 +3025,23 @@ footer {
 .payment-popup-card label {
     text-align: left;
 }
-/* TRANSACTION DETAILS DARK BACKGROUND */
+/* HISTORY TRANSACTION DETAILS - BLACK THEME */
 
-#transaction-details-modal .receipt-card {
+#transaction-details-modal .receipt-new {
     background: #111111 !important;
     color: #ffffff !important;
     border: 1px solid #333333 !important;
-    box-shadow: none !important;
 }
 
-#transaction-details-modal h2,
-#transaction-details-modal h1,
-#transaction-details-modal p,
-#transaction-details-modal strong,
-#transaction-details-modal h3 {
+#transaction-details-modal .receipt-new h1,
+#transaction-details-modal .receipt-new h2,
+#transaction-details-modal .receipt-new h3,
+#transaction-details-modal .receipt-new p,
+#transaction-details-modal .receipt-new strong {
     color: #ffffff !important;
 }
 
-#transaction-details-modal .receipt-details {
+#transaction-details-modal .receipt-new .receipt-details {
     background: #1b1b1b !important;
-    border-color: #333333 !important;
-}
-/* HISTORY TRANSACTION POPUP - BLACK THEME */
-
-#transaction-details-modal .receipt-card {
-    background: #111 !important;
-    color: #fff !important;
-    border: 1px solid #333 !important;
-}
-
-#transaction-details-modal .receipt-card h1,
-#transaction-details-modal .receipt-card h2,
-#transaction-details-modal .receipt-card h3,
-#transaction-details-modal .receipt-card p,
-#transaction-details-modal .receipt-card strong {
-    color: #fff !important;
-}
-
-#transaction-details-modal .receipt-details {
-    background: #1b1b1b !important;
-    border: 1px solid #333 !important;
-}
-
-#transaction-details-modal .receipt-subtitle {
-    color: #bbb !important;
+    border: 1px solid #333333 !important;
 }
