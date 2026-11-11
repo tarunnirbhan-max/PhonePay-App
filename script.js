@@ -389,7 +389,9 @@ function showTransactionDetails(item) {
     });
 
     document.getElementById("detail-status").textContent =
-        item.status || "Completed";
+    item.status === "Simulated"
+        ? "Completed"
+        : item.status || "Completed";
 
     document.getElementById("transaction-details-modal").hidden = false;
 }
@@ -552,7 +554,7 @@ function addTransaction(type, amount, direction, recipientName = "") {
         amount: amount,
         direction: direction || (type === "Money Sent" ? "debit" : "credit"),
         date: new Date().toISOString(),
-        status: "Simulated"
+        status: "Completed"
     });
 
     updateBalance();
