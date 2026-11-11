@@ -378,7 +378,16 @@ function showTransactionDetails(item) {
         item.utr || "Not available";
 
     document.getElementById("detail-date").textContent =
-        item.date;
+    document.getElementById("detail-date").textContent = "DATE TEST SUCCESS";
+    new Date(item.date).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "Asia/Kolkata"
+    });
 
     document.getElementById("detail-status").textContent =
         item.status || "Completed";
@@ -1254,18 +1263,21 @@ function showReceipt(type, amount, item) {
         item.utr;
 
     const transactionDate = new Date(item.date);
+    console.log("RECEIPT DATE TEST:", item.date);
 
-    document.getElementById("receipt-date").textContent =
-        transactionDate.toLocaleTimeString("en-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true
-        }) + " on " +
-        transactionDate.toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        });
+document.getElementById("receipt-date").textContent =
+    transactionDate.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "Asia/Kolkata"
+    }) + " on " +
+    transactionDate.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        timeZone: "Asia/Kolkata"
+    });
 
     receiptModal.hidden = false;
 }
