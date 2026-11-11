@@ -378,7 +378,6 @@ function showTransactionDetails(item) {
         item.utr || "Not available";
 
     document.getElementById("detail-date").textContent =
-    document.getElementById("detail-date").textContent = "DATE TEST SUCCESS";
     new Date(item.date).toLocaleString("en-IN", {
         day: "2-digit",
         month: "long",
