@@ -48,6 +48,51 @@
 </header>
 
     <main id="home-screen" class="screen">
+        <!-- TRENDING AUTO SLIDER -->
+
+<section class="trending-banner">
+
+    <div class="trending-slides">
+
+        <div class="trending-slide active">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900"
+                 alt="Shopping offers">
+            <div class="trending-overlay">
+                <span>TRENDING SHOPPING</span>
+                <h2>Big Shopping Deals</h2>
+                <p>Discover exciting offers today</p>
+            </div>
+        </div>
+
+        <div class="trending-slide">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900"
+                 alt="Food offers">
+            <div class="trending-overlay">
+                <span>FOOD & DINING</span>
+                <h2>Delicious Deals</h2>
+                <p>Explore popular food offers</p>
+            </div>
+        </div>
+
+        <div class="trending-slide">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900"
+                 alt="Travel offers">
+            <div class="trending-overlay">
+                <span>TRAVEL SPECIAL</span>
+                <h2>Explore The World</h2>
+                <p>Discover your next destination</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="trending-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+    </div>
+
+</section>
         
         <div class="welcome-row">
     <div class="welcome-content">
@@ -66,6 +111,7 @@
     </svg>
 </div>
 </div>
+
         <!-- CHECK BANK BALANCE -->
 <section class="balance-card bank-balance-card">
     <div class="balance-top">
@@ -368,29 +414,92 @@
 </div>
 
     
-<!-- QR SCANNER SCREEN -->
-<section id="scanner-screen" class="screen secondary-screen" hidden>
 
-    <h2>Scan QR Code</h2>
-    <p class="screen-subtitle">Upload a QR image to scan</p>
+<!-- FULL SCREEN QR SCANNER -->
+<section id="scanner-screen" class="screen secondary-screen phonepe-scanner" hidden>
 
-    <div id="qr-reader"></div>
+    <!-- TOP HEADER -->
+    <div class="scanner-header">
 
+        <button type="button" id="close-scanner" class="scanner-back">
+            &#8592;
+        </button>
+
+        <div class="scanner-heading">
+            <h2>Scan any QR</h2>
+            <p>PhonePe • Google Pay • BHIM • Paytm</p>
+        </div>
+
+        <button type="button" class="scanner-help">?</button>
+
+    </div>
+
+    <!-- CAMERA AREA -->
+    <div class="scanner-camera-area">
+
+        <div id="qr-reader">
+            <div id="live-camera-reader"></div>
+        </div>
+
+        <!-- SCANNING FRAME -->
+        <div class="scanner-overlay">
+
+            <div class="scanner-frame">
+                <span class="scanner-corner top-left"></span>
+                <span class="scanner-corner top-right"></span>
+                <span class="scanner-corner bottom-left"></span>
+                <span class="scanner-corner bottom-right"></span>
+            </div>
+
+            <p class="scanner-instruction">
+                Scan any QR code to pay
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- BOTTOM CONTROLS -->
+    <div class="scanner-bottom">
+
+        <div class="scanner-controls">
+
+            <label for="scanner-file-input" class="scanner-control">
+                <span class="scanner-control-icon">&#128193;</span>
+                <span>Upload QR</span>
+            </label>
+
+            <input
+                type="file"
+                id="scanner-file-input"
+                accept="image/*"
+                hidden
+            >
+
+            <button type="button" id="scanner-torch" class="scanner-control">
+                <span class="scanner-control-icon">&#9889;</span>
+                <span>Torch</span>
+            </button>
+
+        </div>
+
+        <div class="scanner-branding">
+            <strong>BHIM UPI</strong>
+        </div>
+
+    </div>
+
+    <!-- SCAN RESULT -->
+    <div id="scan-result" role="status"></div>
+
+    <!-- RECIPIENT DETAILS -->
     <div id="scanned-recipient" hidden>
         <p>Recipient</p>
         <strong id="scanned-name"></strong>
         <p id="scanned-upi"></p>
     </div>
 
-    <p id="scan-result" role="status"></p>
-
-    <button type="button" id="close-scanner"
-        class="primary-button">
-        Back to Home
-    </button>
-
 </section>
-
 
     <section id="history-screen" class="screen secondary-screen" hidden>
     <h2>Transaction History</h2>
@@ -800,31 +909,83 @@ if ("serviceWorker" in navigator) {
 </div>
 
 
-<!-- QR PAYMENT POPUP -->
-<div id="qr-payment-modal" class="qr-payment-modal" hidden>
-    <div class="qr-payment-card">
+<!-- QR PAYMENT PAY SCREEN -->
+<div id="qr-payment-modal" class="qr-pay-screen" hidden>
 
-        <div class="qr-payment-check">✓</div>
+    <header class="qr-pay-header">
+        <button type="button" id="qr-pay-cancel">
+    <span class="pay-back-arrow"></span>
+</button>
+        <h2>Pay</h2>
+        <span class="qr-pay-help">?</span>
+    </header>
 
-        <h2>Pay to: <span id="qr-payee-name"></span></h2>
-        <p id="qr-payee-upi"></p>
+    <div class="qr-pay-card">
 
-        <label for="qr-payment-amount">Enter amount</label>
+        <div class="qr-payee-info">
+
+            <div class="qr-payee-avatar" id="qr-payee-avatar">*</div>
+
+            <div class="qr-payee-details">
+                <strong id="qr-payee-name"></strong>
+
+                <p>
+                    Banking name:
+                    <span id="qr-payee-bank-name"></span>
+                    <span class="qr-verified">✓</span>
+                </p>
+
+                <small id="qr-payee-upi"></small>
+            </div>
+
+        </div>
+
+        <div class="qr-pay-amount-box">
+            <span>₹</span>
+            <input
+                type="number"
+                id="qr-payment-amount"
+                placeholder="0"
+                min="1"
+                step="0.01"
+            >
+        </div>
 
         <input
-            type="number"
-            id="qr-payment-amount"
-            placeholder="₹ 0.00"
-            min="1"
-            step="0.01"
+            type="text"
+            id="qr-payment-message"
+            class="qr-pay-message"
+            placeholder="Add a message (optional)"
+            maxlength="100"
         >
 
         <p id="qr-payment-error"></p>
 
-        <button type="button" id="qr-pay-now">Pay Now</button>
-        <button type="button" id="qr-pay-cancel">Cancel</button>
+    </div>
+
+    <button type="button" id="qr-pay-now" class="qr-pay-proceed">
+        Proceed To Pay
+    </button>
+
+</div>
+<!-- PAYMENT SUCCESS SCREEN -->
+
+<div id="payment-success-screen" class="payment-success-screen" hidden>
+
+    <div class="success-content">
+
+        <div class="success-animation">
+            <div class="success-circle">
+                <span class="success-tick"></span>
+            </div>
+        </div>
+
+        <h2>Payment Successful</h2>
+
+        <p id="payment-success-date"></p>
 
     </div>
+
 </div>
 <!-- SMS STYLE NOTIFICATION -->
 <div id="sms-notification" class="sms-notification" hidden>

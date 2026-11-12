@@ -338,7 +338,17 @@ function createTransactionRow(item) {
     name.textContent = item.type;
 
     const date = document.createElement("small");
-    date.textContent = item.date;
+    const transactionDate = new Date(item.date);
+
+date.textContent = transactionDate.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata"
+});
 
     details.append(name, date);
 
@@ -831,172 +841,164 @@ document.getElementById("open-qr").addEventListener("click", showQR);
 document.getElementById("view-all").addEventListener("click", showHistory);
 document.getElementById("back-qr").addEventListener("click", showHome);
 
-// QR IMAGE SCANNER
+
+// QR IMAGE AND LIVE CAMERA SCANNER
 
 let isProcessingQR = false;
+let scannedQRRecipient = null;
+let qrCamera = null;
+let torchEnabled = false;
 
+// OPEN SCANNER AND START CAMERA
 
 async function openQRScanner() {
     showScreen(scannerScreen, navScan);
 
-    const reader = document.getElementById("qr-reader");
     const result = document.getElementById("scan-result");
 
-    if (!reader || !result) return;
-
-    reader.replaceChildren();
     result.textContent = "";
+    torchEnabled = false;
 
-    // CAMERA BUTTON
-    const cameraButton = document.createElement("button");
-    cameraButton.textContent = "Open Camera";
-    cameraButton.className = "primary-button";
-    cameraButton.style.width = "100%";
-    cameraButton.style.marginTop = "15px";
-
-    // IMAGE UPLOAD BUTTON
-    const uploadLabel = document.createElement("label");
-    uploadLabel.textContent = "Choose QR Image";
-    uploadLabel.className = "primary-button";
-    uploadLabel.style.display = "block";
-    uploadLabel.style.textAlign = "center";
-    uploadLabel.style.marginTop = "12px";
-    uploadLabel.style.cursor = "pointer";
-
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.style.display = "none";
-
-    uploadLabel.appendChild(fileInput);
-
-    reader.append(cameraButton, uploadLabel);
-
-    // LIVE CAMERA SCANNER
-    let html5QrCode = null;
-    let cameraResultHandled = false;
-
-    cameraButton.addEventListener("click", async function () {
-        try {
-            if (typeof Html5Qrcode === "undefined") {
-                result.textContent = "Camera scanner library not loaded.";
-                return;
-            }
-
-            cameraButton.disabled = true;
-            result.textContent = "Starting camera...";
-
-            const cameraContainer = document.createElement("div");
-            cameraContainer.id = "live-camera-reader";
-            cameraContainer.style.width = "100%";
-            cameraContainer.style.marginTop = "15px";
-
-            reader.appendChild(cameraContainer);
-
-            html5QrCode = new Html5Qrcode("live-camera-reader");
-
-            await html5QrCode.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
-                async function (decodedText) {
-    if (cameraResultHandled) return;
-    cameraResultHandled = true;
-
-    result.textContent = "QR scanned successfully!";
-
-    try {
-        await html5QrCode.stop();
-    } catch (error) {
-        console.log(error);
+    const torchButton = document.getElementById("scanner-torch");
+    if (torchButton) {
+        torchButton.querySelector("span:last-child").textContent = "Torch";
     }
 
-    await handleQRScan(decodedText);
-},
-                function () {}
-            );
-
-            result.textContent = "Camera active. Scan a QR code.";
-
-        } catch (error) {
-            console.error("Camera error:", error);
-            result.textContent =
-                "Camera could not start. Please allow camera permission.";
-            cameraButton.disabled = false;
+    try {
+        if (typeof Html5Qrcode === "undefined") {
+            result.textContent = "Camera scanner library not loaded.";
+            return;
         }
-    });
 
-    // QR IMAGE UPLOAD
-    fileInput.addEventListener("change", async function () {
-        const file = fileInput.files[0];
+        if (!qrCamera) {
+            qrCamera = new Html5Qrcode("live-camera-reader");
+        }
+
+        if (qrCamera.isScanning) {
+            await qrCamera.stop();
+        }
+
+        await qrCamera.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1
+            },
+            async function(decodedText) {
+                if (isProcessingQR) return;
+
+                result.textContent = "QR scanned successfully!";
+
+                try {
+                    if (qrCamera && qrCamera.isScanning) {
+                        await qrCamera.stop();
+                    }
+                } catch (error) {
+                    console.log("Camera stop:", error);
+                }
+
+                await handleQRScan(decodedText);
+            },
+            function() {
+                // Waiting for QR code
+            }
+        );
+
+    } catch (error) {
+        console.error("Camera error:", error);
+        result.textContent =
+            "Camera could not start. Please allow camera permission.";
+    }
+}
+
+// UPLOAD QR IMAGE
+
+document.getElementById("scanner-file-input")
+    .addEventListener("change", async function() {
+
+        const file = this.files[0];
+        const result = document.getElementById("scan-result");
+
         if (!file) return;
+
+        this.value = "";
+
+        if (typeof jsQR === "undefined") {
+            result.textContent = "QR image scanner library not loaded.";
+            return;
+        }
 
         result.textContent = "Scanning QR image...";
 
-        let bitmap = null;
-
         try {
-            bitmap = await createImageBitmap(file);
+            const bitmap = await createImageBitmap(file);
 
-            let decodedText = null;
+            const canvas = document.createElement("canvas");
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
 
-            if ("BarcodeDetector" in window) {
-                try {
-                    const detector = new BarcodeDetector({
-                        formats: ["qr_code"]
-                    });
+            const context = canvas.getContext("2d", {
+                willReadFrequently: true
+            });
 
-                    const codes = await detector.detect(bitmap);
+            context.drawImage(bitmap, 0, 0);
+            bitmap.close();
 
-                    if (codes.length > 0) {
-                        decodedText = codes[0].rawValue;
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            }
+            const imageData = context.getImageData(
+                0, 0, canvas.width, canvas.height
+            );
 
-            if (!decodedText && typeof jsQR !== "undefined") {
-                const canvas = document.createElement("canvas");
-                canvas.width = bitmap.width;
-                canvas.height = bitmap.height;
+            const code = jsQR(
+                imageData.data,
+                imageData.width,
+                imageData.height,
+                { inversionAttempts: "attemptBoth" }
+            );
 
-                const context = canvas.getContext("2d");
-                context.drawImage(bitmap, 0, 0);
-
-                const imageData = context.getImageData(
-                    0, 0, canvas.width, canvas.height
-                );
-
-                const code = jsQR(
-                    imageData.data,
-                    imageData.width,
-                    imageData.height
-                );
-
-                if (code) decodedText = code.data;
-            }
-
-            if (!decodedText) {
+            if (!code) {
                 result.textContent = "QR not detected. Try another image.";
                 return;
             }
 
             result.textContent = "QR scanned successfully!";
-            await handleQRScan(decodedText);
+            await handleQRScan(code.data);
 
         } catch (error) {
-            console.error(error);
+            console.error("QR image scanning error:", error);
             result.textContent = "Unable to read this image.";
-
-        } finally {
-            if (bitmap) bitmap.close();
         }
     });
-}
-let scannedQRRecipient = null;
+
+// TORCH BUTTON
+
+document.getElementById("scanner-torch")
+    .addEventListener("click", async function() {
+
+        if (!qrCamera || !qrCamera.isScanning) {
+            document.getElementById("scan-result").textContent =
+                "Camera is not running.";
+            return;
+        }
+
+        try {
+            torchEnabled = !torchEnabled;
+
+            await qrCamera.applyVideoConstraints({
+                advanced: [{ torch: torchEnabled }]
+            });
+
+            this.querySelector("span:last-child").textContent =
+                torchEnabled ? "Torch On" : "Torch";
+
+        } catch (error) {
+            torchEnabled = false;
+
+            document.getElementById("scan-result").textContent =
+                "Torch is not supported on this device.";
+        }
+    });
+
 // PROCESS SCANNED UPI QR
 
 async function handleQRScan(decodedText) {
@@ -1036,9 +1038,21 @@ async function handleQRScan(decodedText) {
         }
 
         const upiId = getUPIParam("pa");
-        const name = getUPIParam("pn") || upiId;
+const name = getUPIParam("pn") || "Name not provided in QR";
+
+const amountText = getUPIParam("am");
+const qrAmount = amountText ? Number(amountText) : null;
+
+const note = getUPIParam("tn");
+const merchantCode = getUPIParam("mc");
+const reference = getUPIParam("tr");
+const currency = getUPIParam("cu") || "INR";
 
         if (!upiId || !upiId.includes("@")) {
+            if (currency.toUpperCase() !== "INR") {
+    alert("Only INR payment QR codes are supported.");
+    return;
+}
             alert("Valid UPI ID not found in this QR.");
             return;
         }
@@ -1047,14 +1061,40 @@ async function handleQRScan(decodedText) {
         document.getElementById("scanned-upi").textContent = upiId;
         document.getElementById("scanned-recipient").hidden = false;
 
-        scannedQRRecipient = { name, upiId };
+        scannedQRRecipient = {
+    name: name,
+    upiId: upiId,
+    amount: Number.isFinite(qrAmount) && qrAmount > 0
+        ? qrAmount
+        : null,
+    note: note,
+    merchantCode: merchantCode,
+    reference: reference,
+    currency: currency
+};
 
 document.getElementById("qr-payee-name").textContent = name;
-document.getElementById("qr-payee-upi").textContent = "UPI ID: " + upiId;
 
-document.getElementById("qr-payment-amount").value = "";
+document.getElementById("qr-payee-upi").textContent =
+    "UPI ID: " + upiId;
+
+document.getElementById("qr-payee-bank-name").textContent = name;
+
+document.getElementById("qr-payee-avatar").textContent =
+    name.charAt(0).toUpperCase();
+
+document.getElementById("qr-payment-amount").value =
+    scannedQRRecipient.amount !== null
+        ? scannedQRRecipient.amount.toFixed(2)
+        : "";
+
+document.getElementById("qr-payment-message").value =
+    scannedQRRecipient.note || "";
+
 document.getElementById("qr-payment-error").textContent = "";
 
+qrPaymentModal.hidden = false;
+showScreen(null, null);
 qrPaymentModal.hidden = false;
 
     } catch (error) {
@@ -1096,6 +1136,29 @@ document.getElementById("qr-pay-now").addEventListener("click", function () {
 
     addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
     announceSentPayment(roundedAmount);
+    // SHOW PAYMENT SUCCESS SCREEN
+
+const successScreen = document.getElementById("payment-success-screen");
+
+const successDate = document.getElementById("payment-success-date");
+
+const paymentTime = new Date();
+
+successDate.textContent =
+    paymentTime.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Asia/Kolkata"
+    }) + " at " +
+    paymentTime.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "Asia/Kolkata"
+    });
+
+successScreen.hidden = false;
 
     scannedQRRecipient = null;
 });
@@ -1114,15 +1177,25 @@ if (scanQRButton) {
     scanQRButton.addEventListener("click", openQRScanner);
 }
 
+
 // CLOSE SCANNER
 
-document.getElementById("close-scanner").addEventListener(
-    "click",
-    function () {
+document.getElementById("close-scanner")
+    .addEventListener("click", async function() {
+
         isProcessingQR = false;
+
+        if (qrCamera && qrCamera.isScanning) {
+            try {
+                await qrCamera.stop();
+            } catch (error) {
+                console.log("Camera stop error:", error);
+            }
+        }
+
         showHome();
-    }
-);
+    });
+
 
 // BOTTOM NAVIGATION
 
@@ -1348,3 +1421,23 @@ document.addEventListener("click", function (event) {
         window.print();
     }
 });
+// TRENDING AUTO SLIDER
+
+const trendingSlides = document.querySelectorAll(".trending-slide");
+const trendingDots = document.querySelectorAll(".trending-dots span");
+
+let trendingIndex = 0;
+
+if (trendingSlides.length > 1) {
+    setInterval(() => {
+
+        trendingSlides[trendingIndex].classList.remove("active");
+        trendingDots[trendingIndex].classList.remove("active");
+
+        trendingIndex = (trendingIndex + 1) % trendingSlides.length;
+
+        trendingSlides[trendingIndex].classList.add("active");
+        trendingDots[trendingIndex].classList.add("active");
+
+    }, 4000);
+}
