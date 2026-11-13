@@ -1258,7 +1258,8 @@ document.getElementById("upi-pin-close").addEventListener("click", function () {
     updateUPIPinDots();
 });
 
-// DEMO PAYMENT CONFIRMATION
+
+ // DEMO PAYMENT CONFIRMATION
 upiPinPay.addEventListener("click", function () {
     if (upiPinDigits.length !== 4) {
         alert("Please enter all 4 demo PIN digits.");
@@ -1276,12 +1277,13 @@ upiPinPay.addEventListener("click", function () {
     }
 
     const roundedAmount = pendingQRPaymentAmount;
+    const recipient = scannedQRRecipient;
 
     balance = Math.round((balance - roundedAmount) * 100) / 100;
 
     upiPinScreen.hidden = true;
 
-    addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
+    addTransaction("QR Payment", roundedAmount, "debit", recipient.name);
     announceSentPayment(roundedAmount);
 
     const successScreen = document.getElementById("payment-success-screen");
@@ -1302,13 +1304,93 @@ upiPinPay.addEventListener("click", function () {
             timeZone: "Asia/Kolkata"
         });
 
-    successScreen.hidden = false;
+    // RECIPIENT DETAILS
+    document.getElementById("success-recipient-name").textContent =
+        recipient.name;
+
+    document.getElementById("success-recipient-upi").textContent =
+        recipient.upiId;
+
+    document.getElementById("success-payment-amount").textContent =
+        "₹" + roundedAmount.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("success-avatar").textContent =
+        recipient.name.trim().charAt(0).toUpperCase();
+
+    // SHOW GREEN SUCCESS SCREEN FIRST
+successScreen.hidden = false;
+
+const detailsScreen = document.getElementById("payment-details-screen");
+
+// SHOW BLACK DETAILS SCREEN AFTER 2 SECONDS
+setTimeout(function () {
+    successScreen.hidden = true;
+    detailsScreen.hidden = false;
+}, 2000);
 
     scannedQRRecipient = null;
     pendingQRPaymentAmount = 0;
     upiPinDigits = "";
     updateUPIPinDots();
 });
+
+// DONE BUTTON
+document.getElementById("payment-success-done").addEventListener("click", function () {
+    document.getElementById("payment-details-screen").hidden = true;
+    showHome();
+});
+
+// VIEW PAYMENT DETAILS
+document.getElementById("view-payment-details").addEventListener("click", function () {
+    document.getElementById("payment-details-screen").hidden = true;
+    showHistory();
+});
+
+// SHARE RECEIPT
+document.getElementById("share-payment-receipt").addEventListener("click", async function () {
+    const recipientName =
+        document.getElementById("success-recipient-name").textContent;
+
+    const recipientUpi =
+        document.getElementById("success-recipient-upi").textContent;
+
+    const amount =
+        document.getElementById("success-payment-amount").textContent;
+
+    const receiptText =
+        "Payment Successful\n" +
+        "To: " + recipientName + "\n" +
+        "UPI ID: " + recipientUpi + "\n" +
+        "Amount: " + amount + "\n" +
+        successDate.textContent;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: "Payment Receipt",
+                text: receiptText
+            });
+        } catch (error) {
+            if (error.name !== "AbortError") {
+                console.error("Share error:", error);
+            }
+        }
+    } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(receiptText);
+        alert("Receipt details copied!");
+    } else {
+        alert("Sharing is not supported on this browser.");
+    }
+});
+
+// SPLIT EXPENSE
+document.getElementById("split-expense-btn").addEventListener("click", function () {
+    alert("Split Expense feature coming soon!");
+});
+
 
 
 // CANCEL QR PAYMENT

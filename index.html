@@ -1086,8 +1086,8 @@ if ("serviceWorker" in navigator) {
 
 </div>
 
-<!-- PAYMENT SUCCESS SCREEN -->
 
+<!-- GREEN PAYMENT SUCCESS SCREEN -->
 <div id="payment-success-screen" class="payment-success-screen" hidden>
 
     <div class="success-content">
@@ -1105,6 +1105,64 @@ if ("serviceWorker" in navigator) {
     </div>
 
 </div>
+
+<!-- PAYMENT DETAILS SCREEN -->
+<div id="payment-details-screen" class="payment-details-screen" hidden>
+
+    <div class="success-payment-card">
+
+        <div class="success-recipient-row">
+
+            <div class="success-avatar" id="success-avatar">PS</div>
+
+            <div class="success-recipient-info">
+                <h2 id="success-recipient-name">Recipient</h2>
+                <p id="success-recipient-upi">••••••@upi</p>
+
+                <div class="success-amount-row">
+                    <strong id="success-payment-amount">₹0.00</strong>
+                    <button type="button" id="split-expense-btn">
+                        Split Expense
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="success-action-row">
+
+            <button type="button" id="view-payment-details">
+                <span class="success-action-icon">▤</span>
+                <span>View Details</span>
+            </button>
+
+            <div class="success-action-divider"></div>
+
+            <button type="button" id="share-payment-receipt">
+                <span class="success-action-icon">⌯</span>
+                <span>Share Receipt</span>
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="success-footer">
+        <div class="success-upi-brand">
+            <small>POWERED BY</small>
+            <strong>UPI</strong>
+            <span>UNIFIED PAYMENTS INTERFACE</span>
+        </div>
+    </div>
+
+    <div class="success-done-footer">
+        <button type="button" id="payment-success-done">
+            Done
+        </button>
+    </div>
+
+</div>
+
 <!-- SMS STYLE NOTIFICATION -->
 <div id="sms-notification" class="sms-notification" hidden>
     <div class="sms-notification-header">
