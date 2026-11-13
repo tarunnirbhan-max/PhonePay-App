@@ -1191,9 +1191,79 @@ document.getElementById("qr-add-credit").addEventListener("click", function () {
     alert("Credit Line on UPI option selected.");
 });
 
-// FINAL PAY BUTTON
+
+// FINAL PAY BUTTON - OPEN DEMO UPI PIN SCREEN
+
+const upiPinScreen = document.getElementById("upi-pin-screen");
+const upiPinAmount = document.getElementById("upi-pin-amount");
+const upiPinRecipient = document.getElementById("upi-pin-recipient");
+const upiPinBank = document.getElementById("upi-pin-bank");
+const upiPinPay = document.getElementById("upi-pin-pay");
+
+let upiPinDigits = "";
 
 qrMethodPay.addEventListener("click", function () {
+    if (!pendingQRPaymentAmount || !scannedQRRecipient) {
+        alert("Payment details missing. Please try again.");
+        return;
+    }
+
+    const bankDetails = {
+        bob: "SAVINGS: Bank Of Baroda - 4185",
+        sbi1: "SAVINGS: State Bank Of India - 6971",
+        sbi2: "SAVINGS: State Bank Of India - 0895"
+    };
+
+    const formattedAmount = "₹" + pendingQRPaymentAmount.toFixed(2);
+
+    upiPinAmount.textContent = "Pay " + formattedAmount;
+    upiPinRecipient.textContent = "To " + scannedQRRecipient.name;
+    upiPinBank.textContent = bankDetails[selectedQRBank] || bankDetails.bob;
+
+    upiPinDigits = "";
+    updateUPIPinDots();
+
+    qrMethodScreen.hidden = true;
+    upiPinScreen.hidden = false;
+});
+
+// UPDATE PIN DOTS
+function updateUPIPinDots() {
+    document.querySelectorAll(".upi-pin-dots span").forEach(function (dot, index) {
+        dot.classList.toggle("filled", index < upiPinDigits.length);
+    });
+}
+
+// NUMBER KEYPAD
+document.querySelectorAll("[data-pin-key]").forEach(function (key) {
+    key.addEventListener("click", function () {
+        if (upiPinDigits.length >= 4) return;
+
+        upiPinDigits += key.dataset.pinKey;
+        updateUPIPinDots();
+    });
+});
+
+// DELETE PIN DIGIT
+document.getElementById("upi-pin-delete").addEventListener("click", function () {
+    upiPinDigits = upiPinDigits.slice(0, -1);
+    updateUPIPinDots();
+});
+
+// CLOSE PIN SCREEN
+document.getElementById("upi-pin-close").addEventListener("click", function () {
+    upiPinScreen.hidden = true;
+    qrMethodScreen.hidden = false;
+    upiPinDigits = "";
+    updateUPIPinDots();
+});
+
+// DEMO PAYMENT CONFIRMATION
+upiPinPay.addEventListener("click", function () {
+    if (upiPinDigits.length !== 4) {
+        alert("Please enter all 4 demo PIN digits.");
+        return;
+    }
 
     if (!pendingQRPaymentAmount || !scannedQRRecipient) {
         alert("Payment details missing. Please try again.");
@@ -1207,25 +1277,15 @@ qrMethodPay.addEventListener("click", function () {
 
     const roundedAmount = pendingQRPaymentAmount;
 
-    // DEDUCT BALANCE
-
     balance = Math.round((balance - roundedAmount) * 100) / 100;
 
-    // CLOSE PAYMENT METHOD SCREEN
-
-    qrMethodScreen.hidden = true;
-
-    // SAVE TRANSACTION
+    upiPinScreen.hidden = true;
 
     addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
-
     announceSentPayment(roundedAmount);
-
-    // SHOW PAYMENT SUCCESS SCREEN
 
     const successScreen = document.getElementById("payment-success-screen");
     const successDate = document.getElementById("payment-success-date");
-
     const paymentTime = new Date();
 
     successDate.textContent =
@@ -1244,12 +1304,12 @@ qrMethodPay.addEventListener("click", function () {
 
     successScreen.hidden = false;
 
-    // RESET PAYMENT DATA
-
     scannedQRRecipient = null;
     pendingQRPaymentAmount = 0;
-
+    upiPinDigits = "";
+    updateUPIPinDots();
 });
+
 
 // CANCEL QR PAYMENT
 

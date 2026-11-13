@@ -4619,3 +4619,194 @@ body,
     font-weight: 700;
     cursor: pointer;
 }
+
+/* =====================================
+   UPI DEMO PIN ENTRY SCREEN
+===================================== */
+
+.upi-pin-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 16000;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: max(18px, env(safe-area-inset-top)) 18px
+             max(18px, env(safe-area-inset-bottom));
+    background: #fffdf6;
+    color: #29232e;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+}
+
+.upi-pin-screen[hidden] {
+    display: none !important;
+}
+
+.upi-pin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 65px;
+}
+
+.upi-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.upi-brand strong {
+    color: #777777;
+    font-size: 34px;
+    font-style: italic;
+    letter-spacing: -2px;
+}
+
+.upi-brand strong span {
+    color: #e99b24;
+    margin-left: 4px;
+}
+
+.upi-brand small {
+    color: #999999;
+    font-size: 7px;
+}
+
+.upi-pin-header button {
+    border: 0;
+    background: transparent;
+    color: #999999;
+    font-size: 38px;
+    cursor: pointer;
+}
+
+.upi-account-name {
+    padding: 12px 0 17px;
+    color: #776b78;
+    font-size: 14px;
+    border-bottom: 1px solid #eeeeea;
+}
+
+.upi-payment-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 19px 15px;
+    margin-top: 15px;
+    background: #fff0c7;
+    border-radius: 13px;
+}
+
+.upi-payment-summary div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.upi-payment-summary strong {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.upi-payment-summary span {
+    color: #887b7a;
+    font-size: 14px;
+}
+
+.upi-person-icon {
+    color: #2476cf !important;
+    font-size: 30px !important;
+}
+
+.upi-pin-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 180px;
+    gap: 42px;
+}
+
+.upi-pin-center strong {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.upi-pin-dots {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+}
+
+.upi-pin-dots span {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid #c9b9b9;
+    border-radius: 50%;
+    background: transparent;
+}
+
+.upi-pin-dots span.filled {
+    background: #38313b;
+    border-color: #38313b;
+}
+
+.upi-pin-warning {
+    padding: 12px 0;
+    color: #aaa09d;
+    text-align: center;
+    font-size: 12px;
+}
+
+.upi-pin-warning::first-letter {
+    color: #e9a13b;
+}
+
+.upi-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    padding: 12px 4px 0;
+    background: #f8eff1;
+    border-radius: 18px;
+}
+
+.upi-keypad button {
+    min-height: 75px;
+    border: 0;
+    border-radius: 35px;
+    background: #fffdf8;
+    color: #514657;
+    font-size: 29px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.upi-keypad button:active {
+    background: #e8e2ee;
+}
+
+#upi-pin-delete {
+    background: #dce4fa;
+    font-size: 26px;
+}
+
+#upi-pin-pay {
+    background: #0750c5;
+    color: #ffffff;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+@media (max-height: 700px) {
+    .upi-pin-center {
+        min-height: 130px;
+        gap: 25px;
+    }
+
+    .upi-keypad button {
+        min-height: 58px;
+    }
+}

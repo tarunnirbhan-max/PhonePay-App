@@ -1035,6 +1035,57 @@ if ("serviceWorker" in navigator) {
 
 </div>
 
+<!-- UPI DEMO PIN SCREEN -->
+<div id="upi-pin-screen" class="upi-pin-screen" hidden>
+
+    <header class="upi-pin-header">
+        <div class="upi-brand">
+            <strong>UPI<span>▶</span></strong>
+            <small>UNIFIED PAYMENTS INTERFACE</small>
+        </div>
+        <button type="button" id="upi-pin-close">×</button>
+    </header>
+
+    <div class="upi-account-name" id="upi-pin-bank">
+        SAVINGS: Bank Of Baroda - 4185
+    </div>
+
+    <div class="upi-payment-summary">
+        <div>
+            <strong id="upi-pin-amount">Pay ₹0.00</strong>
+            <span id="upi-pin-recipient">To Recipient</span>
+        </div>
+        <span class="upi-person-icon">♙</span>
+    </div>
+
+    <div class="upi-pin-center">
+        <strong>Enter demo PIN</strong>
+        <div class="upi-pin-dots">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <div class="upi-pin-warning">
+        ⓘ Never enter your real UPI PIN in this demo.
+    </div>
+
+    <div class="upi-keypad">
+        <button type="button" data-pin-key="1">1</button>
+        <button type="button" data-pin-key="2">2</button>
+        <button type="button" data-pin-key="3">3</button>
+        <button type="button" data-pin-key="4">4</button>
+        <button type="button" data-pin-key="5">5</button>
+        <button type="button" data-pin-key="6">6</button>
+        <button type="button" data-pin-key="7">7</button>
+        <button type="button" data-pin-key="8">8</button>
+        <button type="button" data-pin-key="9">9</button>
+        <button type="button" id="upi-pin-delete">⌫</button>
+        <button type="button" data-pin-key="0">0</button>
+        <button type="button" id="upi-pin-pay">Pay</button>
+    </div>
+
+</div>
+
 <!-- PAYMENT SUCCESS SCREEN -->
 
 <div id="payment-success-screen" class="payment-success-screen" hidden>
