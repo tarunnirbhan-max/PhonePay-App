@@ -968,6 +968,73 @@ if ("serviceWorker" in navigator) {
     </button>
 
 </div>
+
+<!-- QR PAYMENT METHOD SCREEN -->
+
+<div id="qr-payment-method-screen" class="qr-method-screen" hidden>
+
+    <header class="qr-method-header">
+        <button type="button" id="qr-method-back">‹</button>
+        <h2>Select Payment Method</h2>
+        <span>?</span>
+    </header>
+
+    <div class="qr-method-total">
+        <span>Total Payable</span>
+        <strong id="qr-method-total-amount">₹0</strong>
+    </div>
+
+    <div class="qr-method-section">
+        <h3>Recommended</h3>
+
+        <div class="qr-bank-option selected" data-bank="bob">
+            <div class="qr-bank-logo bob-logo">BOB</div>
+            <div class="qr-bank-info">
+                <strong>Bank of Baroda</strong>
+                <small>Savings Account •••• 4185</small>
+            </div>
+            <span class="qr-bank-tick">✓</span>
+        </div>
+    </div>
+
+    <div class="qr-method-section">
+        <h3>Other Bank Accounts</h3>
+
+        <div class="qr-bank-option" data-bank="sbi1">
+            <div class="qr-bank-logo sbi-logo-box">SBI</div>
+            <div class="qr-bank-info">
+                <strong>State Bank of India</strong>
+                <small>Savings Account •••• 6971</small>
+            </div>
+            <span class="qr-bank-tick"></span>
+        </div>
+
+        <div class="qr-bank-option" data-bank="sbi2">
+            <div class="qr-bank-logo sbi-logo-box">SBI</div>
+            <div class="qr-bank-info">
+                <strong>State Bank of India</strong>
+                <small>Savings Account •••• 0895</small>
+            </div>
+            <span class="qr-bank-tick"></span>
+        </div>
+    </div>
+
+    <div class="qr-method-add">
+        <button type="button" id="qr-add-bank">
+            + Add Bank Account
+        </button>
+
+        <button type="button" id="qr-add-credit">
+            + Add Credit Line on UPI
+        </button>
+    </div>
+
+    <button type="button" id="qr-method-pay">
+        Pay ₹0
+    </button>
+
+</div>
+
 <!-- PAYMENT SUCCESS SCREEN -->
 
 <div id="payment-success-screen" class="payment-success-screen" hidden>

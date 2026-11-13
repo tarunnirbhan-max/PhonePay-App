@@ -1104,13 +1104,24 @@ qrPaymentModal.hidden = false;
         isProcessingQR = false;
     }
 }
+
 // QR PAYMENT MODAL BUTTONS
 
 const qrPaymentModal = document.getElementById("qr-payment-modal");
 const qrPaymentAmount = document.getElementById("qr-payment-amount");
 const qrPaymentError = document.getElementById("qr-payment-error");
 
+const qrMethodScreen = document.getElementById("qr-payment-method-screen");
+const qrMethodTotal = document.getElementById("qr-method-total-amount");
+const qrMethodPay = document.getElementById("qr-method-pay");
+
+let pendingQRPaymentAmount = 0;
+let selectedQRBank = "bob";
+
+// PROCEED TO PAY - OPEN PAYMENT METHOD SCREEN
+
 document.getElementById("qr-pay-now").addEventListener("click", function () {
+
     const enteredAmount = qrPaymentAmount.value.trim();
     const amount = Number(enteredAmount);
 
@@ -1129,46 +1140,129 @@ document.getElementById("qr-pay-now").addEventListener("click", function () {
         return;
     }
 
-    const roundedAmount = Math.round(amount * 100) / 100;
+    pendingQRPaymentAmount = Math.round(amount * 100) / 100;
 
-    balance = Math.round((balance - roundedAmount) * 100) / 100;
-    qrPaymentModal.hidden = true;
-
-    addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
-    announceSentPayment(roundedAmount);
-    // SHOW PAYMENT SUCCESS SCREEN
-
-const successScreen = document.getElementById("payment-success-screen");
-
-const successDate = document.getElementById("payment-success-date");
-
-const paymentTime = new Date();
-
-successDate.textContent =
-    paymentTime.toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        timeZone: "Asia/Kolkata"
-    }) + " at " +
-    paymentTime.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "Asia/Kolkata"
+    const formattedAmount = "₹" + pendingQRPaymentAmount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
 
-successScreen.hidden = false;
+    qrMethodTotal.textContent = formattedAmount;
+    qrMethodPay.textContent = "Pay " + formattedAmount;
 
-    scannedQRRecipient = null;
+    qrPaymentModal.hidden = true;
+    qrMethodScreen.hidden = false;
 });
 
+// SELECT BANK ACCOUNT
+
+document.querySelectorAll(".qr-bank-option").forEach(function (option) {
+
+    option.addEventListener("click", function () {
+
+        document.querySelectorAll(".qr-bank-option").forEach(function (bank) {
+            bank.classList.remove("selected");
+        });
+
+        option.classList.add("selected");
+        selectedQRBank = option.dataset.bank;
+    });
+
+});
+
+// BACK TO QR PAYMENT SCREEN
+
+document.getElementById("qr-method-back").addEventListener("click", function () {
+
+    qrMethodScreen.hidden = true;
+    qrPaymentModal.hidden = false;
+
+});
+
+// ADD BANK ACCOUNT
+
+document.getElementById("qr-add-bank").addEventListener("click", function () {
+    alert("Add Bank Account option selected.");
+});
+
+// ADD CREDIT LINE
+
+document.getElementById("qr-add-credit").addEventListener("click", function () {
+    alert("Credit Line on UPI option selected.");
+});
+
+// FINAL PAY BUTTON
+
+qrMethodPay.addEventListener("click", function () {
+
+    if (!pendingQRPaymentAmount || !scannedQRRecipient) {
+        alert("Payment details missing. Please try again.");
+        return;
+    }
+
+    if (pendingQRPaymentAmount > balance) {
+        alert("Insufficient virtual balance.");
+        return;
+    }
+
+    const roundedAmount = pendingQRPaymentAmount;
+
+    // DEDUCT BALANCE
+
+    balance = Math.round((balance - roundedAmount) * 100) / 100;
+
+    // CLOSE PAYMENT METHOD SCREEN
+
+    qrMethodScreen.hidden = true;
+
+    // SAVE TRANSACTION
+
+    addTransaction("QR Payment", roundedAmount, "debit", scannedQRRecipient.name);
+
+    announceSentPayment(roundedAmount);
+
+    // SHOW PAYMENT SUCCESS SCREEN
+
+    const successScreen = document.getElementById("payment-success-screen");
+    const successDate = document.getElementById("payment-success-date");
+
+    const paymentTime = new Date();
+
+    successDate.textContent =
+        paymentTime.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            timeZone: "Asia/Kolkata"
+        }) + " at " +
+        paymentTime.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: "Asia/Kolkata"
+        });
+
+    successScreen.hidden = false;
+
+    // RESET PAYMENT DATA
+
+    scannedQRRecipient = null;
+    pendingQRPaymentAmount = 0;
+
+});
+
+// CANCEL QR PAYMENT
+
 document.getElementById("qr-pay-cancel").addEventListener("click", function () {
+
     qrPaymentModal.hidden = true;
     qrPaymentAmount.value = "";
     qrPaymentError.textContent = "";
     scannedQRRecipient = null;
+    pendingQRPaymentAmount = 0;
+
 });
+
 // SCAN QR BUTTON
 
 const scanQRButton = document.getElementById("scan-qr");

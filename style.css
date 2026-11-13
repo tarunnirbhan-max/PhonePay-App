@@ -4427,3 +4427,195 @@ body,
     font-size: 22px;
     box-sizing: border-box;
 }
+
+/* =====================================
+   QR PAYMENT METHOD SCREEN
+===================================== */
+
+.qr-method-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 15000;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 18px 18px 24px;
+    padding-top: max(18px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    background: #101010;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.qr-method-screen[hidden] {
+    display: none !important;
+}
+
+.qr-method-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.qr-method-header button {
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 34px;
+    cursor: pointer;
+    padding: 0 8px;
+}
+
+.qr-method-header h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.qr-method-header span {
+    font-size: 20px;
+    color: #cccccc;
+}
+
+.qr-method-total {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    margin-bottom: 28px;
+    background: #202020;
+    border-radius: 14px;
+}
+
+.qr-method-total span {
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.qr-method-total strong {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.qr-method-section {
+    margin-bottom: 25px;
+}
+
+.qr-method-section h3 {
+    margin: 0 0 13px;
+    color: #c9c9c9;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.qr-bank-option {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 76px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #202020;
+    border: 1px solid #333333;
+    border-radius: 13px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.qr-bank-option.selected {
+    border: 1.5px solid #8b45d5;
+    background: #251b30;
+}
+
+.qr-bank-logo {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.bob-logo {
+    color: #ffffff;
+    background: #ed7625;
+}
+
+.sbi-logo-box {
+    color: #ffffff;
+    background: #245a9c;
+}
+
+.qr-bank-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.qr-bank-info strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.qr-bank-info small {
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+.qr-bank-tick {
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #777777;
+    border-radius: 50%;
+    color: transparent;
+    font-size: 13px;
+}
+
+.qr-bank-option.selected .qr-bank-tick {
+    color: #ffffff;
+    background: #7b2cbf;
+    border-color: #7b2cbf;
+}
+
+.qr-method-add {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 8px 4px;
+    margin-bottom: 25px;
+}
+
+.qr-method-add button {
+    border: 0;
+    background: transparent;
+    color: #c58aff;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+#qr-method-pay {
+    width: 100%;
+    min-height: 52px;
+    margin-top: auto;
+    border: 0;
+    border-radius: 12px;
+    background: #6730a5;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
