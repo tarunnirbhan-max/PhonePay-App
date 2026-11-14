@@ -16,42 +16,20 @@
 
 <div class="app-container">
 
-    <header class="top-header">
-    <div class="brand-logo">
-        <span class="logo-icon">पे</span>
-        <h1>PhonePe</h1>
-    </div>
-
-    <div class="header-actions">
-        <button type="button" class="header-notification"
-                aria-label="Notifications">
-            <svg viewBox="0 0 24 24" width="23" height="23"
-                 fill="none" stroke="currentColor"
-                 stroke-width="1.8" stroke-linecap="round"
-                 stroke-linejoin="round">
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-                <path d="M10 21h4"/>
-            </svg>
-        </button>
-
-        <button type="button" class="header-profile"
-        aria-label="Profile">
-    <svg viewBox="0 0 24 24" width="23" height="23"
-         fill="none" stroke="currentColor"
-         stroke-width="1.8" stroke-linecap="round"
-         stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 21a8 8 0 0 1 16 0"/>
-    </svg>
-</button>
-    </div>
-</header>
-
-    <main id="home-screen" class="screen">
+        <main id="home-screen" class="screen">
         <!-- TRENDING AUTO SLIDER -->
 
 <section class="trending-banner">
+<!-- TOP PROFILE AND HELP ICONS -->
+<div class="top-banner-actions">
 
+    <div class="top-profile-icon">
+    पे
+</div>
+
+    <div class="top-help-icon">?</div>
+
+</div>
     <div class="trending-slides">
 
         <div class="trending-slide active">
@@ -84,34 +62,39 @@
             </div>
         </div>
 
+        <div class="trending-slide">
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=900"
+                 alt="Investment">
+            <div class="trending-overlay">
+                <span>PHONEPE INVEST</span>
+                <h2>Explore PhonePe Invest</h2>
+                <p>Discover investment opportunities</p>
+            </div>
+        </div>
+
+        <div class="trending-slide">
+            <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=900"
+                 alt="Gold">
+            <div class="trending-overlay">
+                <span>DIGITAL GOLD</span>
+                <h2>Buy 24K Gold</h2>
+                <p>Explore digital gold</p>
+            </div>
+        </div>
+
     </div>
 
     <div class="trending-dots">
         <span class="active"></span>
         <span></span>
         <span></span>
+        <span></span>
+        <span></span>
     </div>
 
 </section>
         
-        <div class="welcome-row">
-    <div class="welcome-content">
-        <p class="welcome">Welcome back 👋</p>
-        <h2>What would you like to do?</h2>
-        <span class="welcome-subtitle">Your payments, all in one place.</span>
-    </div>
-
- <div class="user-mini">
-    <svg viewBox="0 0 24 24" width="25" height="25"
-         fill="none" stroke="currentColor"
-         stroke-width="1.8" stroke-linecap="round"
-         stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 21a8 8 0 0 1 16 0"/>
-    </svg>
-</div>
-</div>
-
+        
         <!-- CHECK BANK BALANCE -->
 <section class="balance-card bank-balance-card">
     <div class="balance-top">
@@ -194,8 +177,7 @@
                 </button>
                            </div>
         </section>
-
-        <section class="services-section">
+               <section class="services-section">
             <h3>Recharge & Bill Payments</h3>
             <div class="service-grid">
                 <button type="button" class="service-item" id="mobile-recharge">
@@ -293,8 +275,19 @@
                 </div>
                 <form id="service-payment-form">
                     <label id="service-number-label" for="service-number">Mobile Number</label>
-                    <input type="text" id="service-number"
-                        placeholder="Enter mobile number" required>
+                    <div class="mobile-input-group">
+    <input type="tel" id="service-number"
+        placeholder="Enter mobile number"
+        maxlength="10"
+        inputmode="numeric"
+        required>
+</div>
+
+<button type="button" id="recharge-pick-contact" class="send-pick-contact">
+    <span>👤</span> Choose from Contacts
+</button>
+
+<div id="recharge-contact-name" class="send-contact-name" hidden></div>
 
                     <label for="service-provider">Operator / Provider</label>
                     <select id="service-provider" required>
@@ -335,7 +328,16 @@
         <!-- ACCOUNT SELECTION -->
         <div id="bank-account-step">
 
-            <div class="auth-icon">▣</div>
+            <div class="auth-icon">
+    <svg viewBox="0 0 24 24" width="30" height="30"
+         fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M3 9h18L12 3 3 9z"/>
+        <path d="M5 10v8M9 10v8M15 10v8M19 10v8"/>
+        <path d="M3 20h18M2 22h20"/>
+    </svg>
+</div>
 
             <h2>Select Bank Account</h2>
             <p class="auth-subtitle">
@@ -343,17 +345,17 @@
             </p>
 
             <button type="button" id="select-bank-account"
-                class="bank-account-option">
+    class="bank-account-option">
 
-                <span class="bank-account-logo">SBI</span>
+    <span class="bank-account-logo">SBI</span>
 
-                <span class="bank-account-info">
-                    <strong>State Bank of India</strong>
-                    <small> Savings Account •••• 8711</small>
-                </span>
+    <span class="bank-account-info">
+        <strong>State Bank of India</strong>
+        <small> Savings Account •••• 8711</small>
+    </span>
 
-                <span class="bank-radio">◯</span>
-            </button>
+    <span class="bank-radio">◯</span>
+</button>
 
             <button type="button" id="continue-bank-balance"
                 class="auth-primary-button" disabled>
@@ -465,9 +467,17 @@
         <div class="scanner-controls">
 
             <label for="scanner-file-input" class="scanner-control">
-                <span class="scanner-control-icon">&#128193;</span>
-                <span>Upload QR</span>
-            </label>
+    <span class="scanner-control-icon">
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="3"/>
+            <circle cx="8.5" cy="9" r="1.5"/>
+            <path d="m21 15-5-5L5 20"/>
+        </svg>
+    </span>
+    <span>Upload QR</span>
+</label>
 
             <input
                 type="file"
@@ -477,9 +487,16 @@
             >
 
             <button type="button" id="scanner-torch" class="scanner-control">
-                <span class="scanner-control-icon">&#9889;</span>
-                <span>Torch</span>
-            </button>
+    <span class="scanner-control-icon">
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2h6l1 7H8l1-7Z"/>
+            <path d="M8 9h8l-1 13H9L8 9Z"/>
+        </svg>
+    </span>
+    <span>Torch</span>
+</button>
 
         </div>
 
@@ -681,8 +698,7 @@
                 <path d="M18 18h1"/>
             </svg>
         </span>
-        <span>Scan</span>
-    </button>
+        </button>
 
     <button type="button" id="nav-alerts">
         <span class="nav-icon">
@@ -874,6 +890,10 @@ if ("serviceWorker" in navigator) {
                     autocomplete="tel-national"
                 >
             </div>
+            <button type="button" id="send-pick-contact" class="send-pick-contact">
+    <span>👤</span> Choose from Contacts
+</button>
+            <div id="send-contact-name" class="send-contact-name" hidden></div>
         </div>
 
         <div id="payment-amount-step" hidden>
@@ -1059,14 +1079,14 @@ if ("serviceWorker" in navigator) {
     </div>
 
     <div class="upi-pin-center">
-        <strong>Enter demo PIN</strong>
+        <strong>Enter PIN</strong>
         <div class="upi-pin-dots">
             <span></span><span></span><span></span><span></span>
         </div>
     </div>
 
     <div class="upi-pin-warning">
-        ⓘ Never enter your real UPI PIN in this demo.
+        ⓘ Never enter your UPI PIN to receive money.
     </div>
 
     <div class="upi-keypad">
@@ -1101,64 +1121,105 @@ if ("serviceWorker" in navigator) {
         <h2>Payment Successful</h2>
 
         <p id="payment-success-date"></p>
+        <button type="button" id="payment-success-done">
+    Done
+</button>
 
     </div>
 
 </div>
 
-<!-- PAYMENT DETAILS SCREEN -->
-<div id="payment-details-screen" class="payment-details-screen" hidden>
 
-    <div class="success-payment-card">
+<!-- TRANSACTION SUCCESSFUL DETAILS SCREEN -->
 
-        <div class="success-recipient-row">
+<div id="transaction-success-screen" class="transaction-success-screen" hidden>
 
-            <div class="success-avatar" id="success-avatar">PS</div>
+    <header class="transaction-success-header">
+        <button type="button" id="transaction-success-back">←</button>
+        <div>
+            <h2>Transaction Successful</h2>
+            <p id="transaction-success-date">—</p>
+        </div>
+    </header>
 
-            <div class="success-recipient-info">
-                <h2 id="success-recipient-name">Recipient</h2>
-                <p id="success-recipient-upi">••••••@upi</p>
+    <div class="transaction-success-card">
 
-                <div class="success-amount-row">
-                    <strong id="success-payment-amount">₹0.00</strong>
-                    <button type="button" id="split-expense-btn">
-                        Split Expense
-                    </button>
-                </div>
+        <h3>Paid to</h3>
+
+        <div class="transaction-paid-row">
+            <div class="transaction-recipient-avatar" id="transaction-recipient-avatar">P</div>
+
+            <div class="transaction-recipient-info">
+                <strong id="transaction-recipient-name">Recipient</strong>
+                <p id="transaction-recipient-upi">—</p>
             </div>
 
+            <strong id="transaction-success-amount">₹0</strong>
         </div>
 
-        <div class="success-action-row">
+        <div class="transaction-banking-row">
+            <span>Banking Name</span>
+            <strong id="transaction-banking-name">—</strong>
+        </div>
 
-            <button type="button" id="view-payment-details">
-                <span class="success-action-icon">▤</span>
-                <span>View Details</span>
+        <div class="transaction-transfer-section">
+            <h3>▤ &nbsp; Transfer Details</h3>
+
+            <p>PhonePe Transaction ID</p>
+            <div class="transaction-copy-row">
+                <strong id="transaction-success-id">—</strong>
+                <button type="button" id="copy-transaction-id">▢</button>
+            </div>
+
+            <p>Debited from</p>
+            <div class="transaction-debit-row">
+                <div class="transaction-bank-icon">B</div>
+                <strong id="transaction-debit-bank">—</strong>
+                <strong id="transaction-debit-amount">₹0</strong>
+            </div>
+
+            <div class="transaction-copy-row">
+                <span id="transaction-success-utr">UTR: —</span>
+                <button type="button" id="copy-transaction-utr">▢</button>
+            </div>
+        </div>
+
+        <div class="transaction-success-actions">
+
+            <button type="button" id="transaction-send-again">
+                <span>↗</span>
+                Send Again
             </button>
 
-            <div class="success-action-divider"></div>
+            <button type="button" id="transaction-view-history">
+                <span>◷</span>
+                View History
+            </button>
 
-            <button type="button" id="share-payment-receipt">
-                <span class="success-action-icon">⌯</span>
-                <span>Share Receipt</span>
+            <button type="button" id="transaction-split-expense">
+                <span>⇄</span>
+                Split Expense
+            </button>
+
+            <button type="button" id="transaction-share-receipt">
+                <span>♧</span>
+                Share Receipt
             </button>
 
         </div>
 
     </div>
 
-    <div class="success-footer">
-        <div class="success-upi-brand">
-            <small>POWERED BY</small>
-            <strong>UPI</strong>
-            <span>UNIFIED PAYMENTS INTERFACE</span>
-        </div>
+    <div class="transaction-support-card">
+        <span>ⓘ</span>
+        Contact Support
+        <span>›</span>
     </div>
 
-    <div class="success-done-footer">
-        <button type="button" id="payment-success-done">
-            Done
-        </button>
+    <div class="transaction-success-footer">
+        Powered by
+        <strong>UPI</strong>
+        <small>Unified Payments Interface</small>
     </div>
 
 </div>
@@ -1175,6 +1236,149 @@ if ("serviceWorker" in navigator) {
         <p id="sms-message"></p>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- BANK TRANSFER SCREEN -->
+<section id="bank-transfer-screen" class="screen secondary-screen" hidden>
+
+    <header class="bank-transfer-header">
+        <button type="button" id="bank-transfer-back">←</button>
+        <div>
+            <h2>To Bank & Self A/c</h2>
+            <p>Transfer money to your bank account</p>
+        </div>
+    </header>
+
+    <section class="bank-transfer-hero">
+        <h2>Bank Transfer</h2>
+        <p>Choose how you want to transfer money</p>
+    </section>
+<!-- SELF BANK ACCOUNT FORM -->
+<div id="self-bank-form" hidden>
+
+    <h2>Transfer to Self Account</h2>
+    <p>Enter your own bank account details</p>
+
+    <label>Account Holder Name</label>
+    <input type="text" id="self-account-name"
+        placeholder="Enter your name">
+
+    <label>Account Number</label>
+    <input type="text" id="self-account-number"
+        inputmode="numeric" placeholder="Enter account number">
+
+    <label>Confirm Account Number</label>
+    <input type="text" id="self-confirm-account"
+        inputmode="numeric" placeholder="Re-enter account number">
+
+    <label>IFSC Code</label>
+    <input type="text" id="self-account-ifsc"
+        placeholder="Enter IFSC code">
+
+    <label>Amount</label>
+    <input type="number" id="self-transfer-amount"
+        inputmode="decimal" placeholder="Enter amount">
+
+    <p id="self-transfer-error"></p>
+
+    <button type="button" id="self-transfer-continue">
+        Continue
+    </button>
+
+</div>
+<!-- SELF TRANSFER REVIEW -->
+<div id="self-transfer-review" hidden>
+
+    <h2>Review Transfer</h2>
+
+    <p>Account Holder</p>
+    <strong id="review-holder"></strong>
+
+    <p>Account Number</p>
+    <strong id="review-account"></strong>
+
+    <p>IFSC Code</p>
+    <strong id="review-ifsc"></strong>
+
+    <p>Transfer Amount</p>
+    <strong id="review-amount"></strong>
+
+    <button type="button" id="self-transfer-confirm">
+        Confirm Transfer
+    </button>
+
+</div>
+    <section class="bank-transfer-options">
+
+        <div class="bank-transfer-cards">
+
+            <button type="button" id="self-bank-account" class="bank-transfer-card">
+                <span class="bank-transfer-card-icon">
+    <svg viewBox="0 0 48 48" width="29" height="29"
+         fill="none" stroke="currentColor" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="14" r="7"/>
+        <path d="M5 38v-4c0-7 5-11 13-11 4 0 7 1 9 3"/>
+        <rect x="27" y="25" width="16" height="16" rx="3"/>
+        <path d="M31 33h8M35 29v8"/>
+    </svg>
+</span>
+                <strong>To Self Bank Account</strong>
+            </button>
+
+            <button type="button" id="account-ifsc" class="bank-transfer-card">
+                <span class="bank-transfer-card-icon">▤</span>
+                <strong>To Account Number &amp; IFSC</strong>
+            </button>
+
+        </div>
+
+        <button type="button" id="upi-transfer" class="bank-transfer-upi">
+            <span class="bank-transfer-upi-icon">@</span>
+            <span class="bank-transfer-upi-text">
+                <strong>To UPI ID or Number</strong>
+                <button type="button" id="add-money-option" class="bank-transfer-upi">
+    <span class="bank-transfer-upi-icon">＋</span>
+    <span class="bank-transfer-upi-text">
+        <strong>Add Money to Wallet</strong>
+        <small>Add funds to your wallet</small>
+    </span>
+    <span class="bank-transfer-chevron">›</span>
+</button>
+<!-- ADD MONEY FORM -->
+<div id="add-money-form" hidden>
+<button type="button" id="add-money-back">← Back</button>
+    <h2>Add Money to Wallet</h2>
+    <p>Enter amount to add to your wallet</p>
+
+    <label>Amount</label>
+    <input
+        type="number"
+        id="add-money-amount"
+        inputmode="decimal"
+        placeholder="Enter amount"
+    >
+
+    <p id="add-money-error"></p>
+
+    <button type="button" id="add-money-confirm">
+        Add Money
+    </button>
+
+</div>
+
+    </section>
+
+    <div class="bank-transfer-footer">
+        <small>POWERED BY</small>
+        <strong>UPI</strong>
+        <small>UNIFIED PAYMENTS INTERFACE</small>
+       </div>
+
+</section>
+
+</div>
+
 <script src="./script.js"></script>
 </body>
 </html>

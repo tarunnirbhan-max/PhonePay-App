@@ -24,6 +24,8 @@
 
 html {
     width: 100%;
+    max-width: 100vw;
+left: 0;
     min-height: 100%;
 }
 
@@ -112,7 +114,7 @@ button {
     width: 100%;
     min-width: 0;
     flex: 1;
-    padding: 22px 18px;
+    padding: 22px 0;
 }
 
 [hidden] {
@@ -1254,12 +1256,18 @@ opacity: 1;
 /* HOME SCREEN - DARK THEME */
 
 body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
     background: #080808;
     color: #ffffff;
-    padding: 0;
 }
 
 .app-container {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
     background: #080808;
     color: #ffffff;
     border-radius: 0;
@@ -1295,7 +1303,19 @@ body {
 
 .actions-section {
     background: #080808;
-    padding: 20px 15px;
+    padding: 20px 0;
+}
+.actions-section .actions {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+.actions-section h3 {
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
 }
 
 .actions-section h3,
@@ -1316,7 +1336,7 @@ body {
     border-top: 1px solid #292929;
     border-bottom: 1px solid #292929;
     margin: 0;
-    padding: 22px 15px;
+    padding: 22px 0;
 }
 
 .services-section h3 {
@@ -1800,10 +1820,12 @@ footer {
 }
 
 #bank-balance-amount {
-    color: #292333;
-    font-size: 30px;
-    font-weight: 800;
+    color: #1a1422 !important;
+    font-size: 32px;
+    font-weight: 900;
+    opacity: 1 !important;
     margin: 22px 0 5px;
+    text-shadow: none;
 }
 /* RECIPIENT CARD SPACING AND ALIGNMENT */
 
@@ -2242,6 +2264,7 @@ body {
     width: 45px !important;
     height: 45px !important;
     border-radius: 15px !important;
+    overflow: hidden !important;
 }
 
 .services-section {
@@ -3253,16 +3276,23 @@ footer {
 }
 
 .scanner-control-icon {
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #383838;
-    font-size: 23px;
+    font-size: 18px;
 }
 
+.scanner-control-icon svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
 .scanner-branding {
     margin-top: 23px;
     text-align: center;
@@ -3872,9 +3902,9 @@ footer {
 
 .trending-banner {
     position: relative;
-    width: calc(100% - 28px);
-    height: 155px;
-    margin: 12px auto 18px;
+    width: 100%;
+    height: 190px;
+    margin: 0 0 18px;
     border-radius: 15px;
     overflow: hidden;
     background: #222;
@@ -4876,106 +4906,110 @@ body,
     margin: 0;
 }
 
+
 /* PAYMENT CARD */
 
-.success-payment-card {
+.payment-details-screen .success-payment-card {
     position: relative;
     z-index: 2;
-    margin: -45px 16px 0;
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
     flex-shrink: 0;
     overflow: hidden;
     background: #191919;
-    border-radius: 25px;
+    border-radius: 20px;
     border: 1px solid #454545;
-}
-
-.success-recipient-row {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    padding: 30px 23px;
-    min-height: 185px;
     box-sizing: border-box;
 }
 
-.success-avatar {
-    width: 90px;
-    height: 90px;
+.payment-details-screen .success-recipient-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px 17px;
+    min-height: 135px;
+    box-sizing: border-box;
+}
+
+.payment-details-screen .success-avatar {
+    width: 62px;
+    height: 62px;
     flex-shrink: 0;
-    border-radius: 28px;
+    border-radius: 50%;
     background: #22afe9;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
+    font-size: 25px;
 }
 
-.success-recipient-info {
+.payment-details-screen .success-recipient-info {
     min-width: 0;
     flex: 1;
 }
 
-.success-recipient-info h2 {
-    font-size: 23px;
-    margin: 0 0 9px;
+.payment-details-screen .success-recipient-info h2 {
+    font-size: 18px;
+    margin: 0 0 6px;
     overflow-wrap: anywhere;
 }
 
-.success-recipient-info p {
+.payment-details-screen .success-recipient-info p {
     color: #c5c5c5;
-    font-size: 15px;
-    margin: 0 0 20px;
+    font-size: 12px;
+    margin: 0 0 14px;
     overflow-wrap: anywhere;
 }
 
-.success-amount-row {
+.payment-details-screen .success-amount-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
 }
 
-.success-amount-row strong {
-    font-size: 27px;
+.payment-details-screen .success-amount-row strong {
+    font-size: 23px;
 }
 
-.success-amount-row button {
+.payment-details-screen .success-amount-row button {
     border: 0;
     background: transparent;
     color: #bd80ff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
 }
 
 /* DETAILS AND SHARE BUTTONS */
 
-.success-action-row {
-    min-height: 125px;
+.payment-details-screen .success-action-row {
+    min-height: 88px;
     border-top: 1px solid #454545;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-.success-action-row button {
+.payment-details-screen .success-action-row button {
     flex: 1;
-    height: 100%;
-    min-height: 125px;
+    min-width: 0;
+    min-height: 88px;
     border: 0;
     background: transparent;
     color: #eeeeee;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    font-size: 15px;
+    gap: 8px;
+    font-size: 12px;
 }
 
-.success-action-icon {
-    width: 65px;
-    height: 65px;
+.payment-details-screen .success-action-icon {
+    width: 42px;
+    height: 42px;
     flex-shrink: 0;
     border-radius: 50%;
     background: #43136f;
@@ -4983,58 +5017,66 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
+    font-size: 23px;
 }
 
-.success-action-divider {
+.payment-details-screen .success-action-divider {
     width: 1px;
-    height: 85px;
+    height: 55px;
     background: #454545;
 }
 
 /* UPI FOOTER */
 
-.success-footer {
-    flex: 1;
-    min-height: 100px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 25px 0 20px;
-}
-
-.success-upi-brand {
+.payment-details-screen .success-upi-brand {
     display: flex;
     flex-direction: column;
     align-items: center;
     color: #a5a5a5;
 }
 
-.success-upi-brand small {
+.payment-details-screen .success-upi-brand small {
     font-size: 8px;
     letter-spacing: 1px;
 }
 
-.success-upi-brand strong {
-    font-size: 38px;
+.payment-details-screen .success-upi-brand strong {
+    font-size: 32px;
     font-style: italic;
-    line-height: 35px;
+    line-height: 32px;
 }
 
-.success-upi-brand span {
+.payment-details-screen .success-upi-brand span {
     font-size: 6px;
 }
 
+
+
 /* DONE BUTTON */
 
-.success-done-footer {
-    min-height: 75px;
+.payment-details-screen .success-done-footer {
+    width: 100%;
+    max-width: 430px;
+    min-height: 62px;
     flex-shrink: 0;
+    margin: 0 auto;
     background: #191919;
     border-top: 1px solid #303030;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+}
+
+.payment-details-screen .success-done-footer button {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 25px;
+    background: #6730a5;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .success-done-footer button {
@@ -5141,6 +5183,7 @@ body,
     color: #e5f4d8;
 }
 
+
 /* =====================================
    BLACK PAYMENT DETAILS SCREEN
 ===================================== */
@@ -5149,39 +5192,940 @@ body,
     position: fixed;
     inset: 0;
     z-index: 17001;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     overflow-y: auto;
+    overflow-x: hidden;
     background: #242424;
     color: #ffffff;
     font-family: Arial, sans-serif;
+    padding:
+        max(env(safe-area-inset-top), 12px)
+        16px
+        max(env(safe-area-inset-bottom), 12px);
+}
+
+.payment-details-screen[hidden] {
+    display: none !important;
 }
 
 .payment-details-screen .success-payment-card {
-    margin: 55px 16px 0;
+    width: 100%;
+    max-width: 430px;
+    margin: 28px auto 0;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .payment-details-screen .success-footer {
     flex: 1;
-    min-height: 150px;
+    min-height: 100px;
     align-items: center;
-    padding-top: 35px;
-    padding-bottom: 20px;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 15px;
+    box-sizing: border-box;
 }
 
 .payment-details-screen .success-done-footer {
-    min-height: 75px;
+    width: 100%;
+    max-width: 430px;
+    min-height: 65px;
+    margin: 0 auto;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 @media (max-height: 650px) {
     .payment-details-screen .success-payment-card {
-        margin-top: 20px;
+        margin-top: 12px;
     }
 
     .payment-details-screen .success-footer {
-        min-height: 100px;
+        min-height: 65px;
+        padding-top: 10px;
     }
+
+    .payment-details-screen .success-done-footer {
+        min-height: 55px;
+    }
+}
+
+/* TRANSACTION SUCCESSFUL DETAILS PAGE */
+
+.transaction-success-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 18000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #0b0b0b;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+}
+
+.transaction-success-screen[hidden] {
+    display: none !important;
+}
+
+/* GREEN HEADER */
+
+.transaction-success-header {
+    min-height: 100px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 22px;
+    background: #087d32;
+    box-sizing: border-box;
+}
+
+.transaction-success-header button {
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 38px;
+    padding: 0;
+}
+
+.transaction-success-header h2 {
+    margin: 0 0 4px;
+    font-size: 21px;
+}
+
+.transaction-success-header p {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* MAIN CARD */
+
+.transaction-success-card {
+    margin: 18px 16px 0;
+    padding: 26px 20px;
+    border-radius: 22px;
+    background: #191919;
+    box-sizing: border-box;
+}
+
+.transaction-success-card > h3 {
+    margin: 0 0 28px;
+    font-size: 21px;
+}
+
+.transaction-paid-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #444;
+}
+
+.transaction-recipient-avatar {
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22afe9;
+    font-size: 25px;
+}
+
+.transaction-recipient-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.transaction-recipient-info strong {
+    font-size: 19px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.transaction-recipient-info p {
+    margin: 7px 0 0;
+    color: #c5c5c5;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+#transaction-success-amount {
+    font-size: 21px;
+    white-space: nowrap;
+}
+
+/* BANKING NAME */
+
+.transaction-banking-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 27px 0;
+    border-bottom: 1px solid #444;
+    color: #c5c5c5;
+    font-size: 14px;
+}
+
+.transaction-banking-row strong {
+    color: #ffffff;
+    font-weight: 500;
+    text-align: right;
+}
+
+/* TRANSFER DETAILS */
+
+.transaction-transfer-section {
+    padding-top: 25px;
+}
+
+.transaction-transfer-section h3 {
+    margin: 0 0 28px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.transaction-transfer-section > p {
+    margin: 22px 0 12px;
+    color: #c5c5c5;
+    font-size: 14px;
+}
+
+.transaction-copy-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+}
+
+.transaction-copy-row strong,
+.transaction-copy-row span {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.transaction-copy-row button {
+    flex-shrink: 0;
+    border: 0;
+    background: transparent;
+    color: #bd80ff;
+    font-size: 23px;
+}
+
+.transaction-debit-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 12px 0 20px;
+}
+
+.transaction-bank-icon {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #e85b43;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.transaction-debit-row > strong:nth-child(2) {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.transaction-debit-row > strong:last-child {
+    font-size: 18px;
+}
+
+/* ACTION BUTTONS */
+
+.transaction-success-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #444;
+}
+
+.transaction-success-actions button {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 11px;
+    text-align: center;
+}
+
+.transaction-success-actions button span {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #43136f;
+    color: #bd80ff;
+    font-size: 27px;
+}
+
+/* SUPPORT */
+
+.transaction-support-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 16px;
+    padding: 25px 20px;
+    border-radius: 20px;
+    background: #191919;
+    font-size: 16px;
+}
+
+.transaction-support-card span:last-child {
+    margin-left: auto;
+    font-size: 27px;
+}
+
+/* FOOTER */
+
+.transaction-success-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 25px 0 35px;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.transaction-success-footer strong {
+    color: #bd80ff;
+    font-size: 32px;
+    font-style: italic;
+}
+
+.transaction-success-footer small {
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+/* DONE BUTTON - FINAL BACKGROUND FIX */
+
+.payment-details-screen .success-done-footer {
+    background: #191919 !important;
+}
+
+.payment-details-screen .success-done-footer button {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 25px !important;
+    background: #6730a5 !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+/* GREEN SUCCESS SCREEN - DONE BUTTON FIX */
+
+#payment-success-screen #payment-success-done {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    border-radius: 25px !important;
+    padding: 12px 45px !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+/* QR SCANNER ICON VISIBILITY FIX */
+
+.bottom-nav button.nav-scan {
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+.nav-scan-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.nav-scan-icon svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    stroke: #ffffff;
+    fill: none;
+}
+/* MONEY TRANSFER ICON ROUND SHAPE FIX */
+
+.actions-section .action-icon {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+/* FINAL MONEY TRANSFER ROUND ICON FIX */
+
+.actions-section .action-button .action-icon.blue,
+.actions-section .action-button .action-icon.green,
+.actions-section .action-button .action-icon.orange,
+.actions-section .action-button .action-icon.purple {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+/* TOP BANNER PHONEPE AND HELP ICONS */
+
+.trending-banner {
+    position: relative;
+}
+
+.top-banner-actions {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+/* PHONEPE LOGO */
+
+.top-profile-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    border-radius: 50%;
+    background: #5f259f;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+/* HELP ICON */
+
+.top-help-icon {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+/* BANK BALANCE VISIBILITY FIX */
+
+#bank-balance-result #bank-balance-amount {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ffffff !important;
+-webkit-text-fill-color: #ffffff !important;
+    font-size: 32px !important;
+    font-weight: 900 !important;
+    line-height: 1.4 !important;
+    position: relative;
+    z-index: 10;
+}
+.bank-account-logo {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #174b91 !important;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+/* SELECTED CONTACT NAME */
+.send-contact-name {
+    margin-top: 8px;
+    padding: 9px 12px;
+    color: #5f259f;
+    background: #f3edfa;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* BANK TRANSFER - CLEAN MOBILE DESIGN */
+
+#bank-transfer-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: #080808;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 12px 16px 20px;
+}
+
+.bank-transfer-screen[hidden] {
+    display: none !important;
+}
+
+.bank-transfer-header {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.bank-transfer-header button {
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.bank-transfer-help {
+    width: 27px;
+    height: 27px;
+    border: 1px solid #fff !important;
+    border-radius: 50%;
+    font-size: 17px !important;
+}
+
+.bank-transfer-hero {
+    position: relative;
+    min-height: 190px;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: linear-gradient(125deg, #062b15, #06160c 75%, #080808);
+}
+
+.bank-transfer-hero h2 {
+    margin: 0 0 19px;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.bank-transfer-hero h3 {
+    margin: 0 0 7px;
+    color: #48c875;
+    font-size: 16px;
+}
+
+.bank-transfer-hero p {
+    margin: 0;
+    color: #ccc;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.bank-transfer-art {
+    position: absolute;
+    right: 14px;
+    bottom: 8px;
+    width: 115px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bank-transfer-coin {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #b78b32;
+    color: #fff;
+    font-size: 20px;
+}
+
+.bank-transfer-bank-art {
+    color: #159447;
+    font-size: 48px;
+}
+
+.bank-transfer-options {
+    padding: 18px 0 0;
+}
+
+.bank-transfer-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.bank-transfer-card {
+    min-width: 0;
+    min-height: 145px;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    border: 1px solid #444;
+    border-radius: 15px;
+    background: #202020;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.bank-transfer-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4d167e;
+    color: white;
+    font-size: 23px;
+}
+
+.bank-transfer-card strong {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.bank-transfer-upi {
+    width: 100%;
+    min-height: 82px;
+    margin-top: 16px;
+    padding: 12px 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 0;
+    border-top: 1px solid #353535;
+    border-bottom: 1px solid #353535;
+    background: transparent;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.bank-transfer-upi-icon {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border: 1px solid #777;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    font-size: 25px;
+}
+
+.bank-transfer-upi-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.bank-transfer-upi-text strong {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.bank-transfer-upi-text small {
+    color: #aaa;
+    font-size: 11px;
+}
+
+.bank-transfer-chevron {
+    color: #aaa;
+    font-size: 24px;
+}
+
+.bank-transfer-footer {
+    padding: 30px 0 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #999;
+    font-size: 8px;
+}
+
+.bank-transfer-footer strong {
+    color: white;
+    font-size: 24px;
+    font-style: italic;
+}
+
+@media (max-width: 350px) {
+    .bank-transfer-card {
+        padding: 12px 9px;
+    }
+
+    .bank-transfer-card strong {
+        font-size: 12px;
+    }
+}
+/* SELF BANK ACCOUNT FORM */
+
+#self-bank-form {
+    padding: 20px 16px;
+    background: #151515;
+    border-radius: 16px;
+    color: #fff;
+}
+
+#self-bank-form h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+}
+
+#self-bank-form p {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+#self-bank-form label {
+    display: block;
+    margin: 15px 0 7px;
+    font-size: 13px;
+    color: #ddd;
+}
+
+#self-bank-form input {
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+    padding: 0 13px;
+    border: 1px solid #444;
+    border-radius: 9px;
+    background: #242424;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+}
+
+#self-bank-form input:focus {
+    border-color: #48c875;
+}
+
+#self-transfer-error {
+    color: #ff7777 !important;
+    margin: 12px 0 !important;
+}
+
+#self-transfer-continue {
+    width: 100%;
+    height: 49px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #48c875;
+    color: #07140b;
+    font-size: 16px;
+    font-weight: 700;
+}
+/* SELF TRANSFER REVIEW */
+
+#self-transfer-review {
+    padding: 22px 18px;
+    background: #151515;
+    color: #fff;
+    border-radius: 16px;
+}
+
+#self-transfer-review h2 {
+    font-size: 22px;
+    margin: 0 0 8px;
+}
+
+#self-transfer-review > p {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.self-review-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.self-review-row span,
+.self-review-amount span {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.self-review-row strong {
+    font-size: 16px;
+}
+
+.self-review-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding: 18px 0;
+}
+
+.self-review-amount strong {
+    font-size: 24px;
+    color: #48c875;
+}
+
+#self-transfer-confirm {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    background: #48c875;
+    color: #07140b;
+    font-size: 16px;
+    font-weight: 700;
+}
+/* ADD MONEY FORM */
+
+#add-money-form {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 24px 18px;
+    margin-top: 18px;
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 18px;
+    color: #fff;
+}
+
+#add-money-form h2 {
+    font-size: 22px;
+    margin: 18px 0 8px;
+    font-weight: 700;
+}
+
+#add-money-form p {
+    color: #aaa;
+    font-size: 14px;
+    margin: 8px 0 22px;
+}
+
+#add-money-form label {
+    display: block;
+    margin-bottom: 9px;
+    color: #ddd;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#add-money-amount {
+    width: 100%;
+    height: 58px;
+    box-sizing: border-box;
+    padding: 0 16px;
+    border: 1px solid #555;
+    border-radius: 12px;
+    background: #222;
+    color: #fff;
+    font-size: 23px;
+    font-weight: 600;
+    outline: none;
+}
+
+#add-money-amount:focus {
+    border-color: #a66bff;
+}
+
+#add-money-error {
+    color: #ff7777 !important;
+    min-height: 18px;
+    margin: 12px 0 !important;
+}
+
+#add-money-confirm {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 12px;
+    background: #5f259f;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 12px;
+}
+
+#add-money-back {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    padding: 5px 0;
+    margin-bottom: 12px;
 }

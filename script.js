@@ -650,12 +650,53 @@ const paymentPopupMessage = document.getElementById("payment-popup-message");
 const sendMobileStep = document.getElementById("send-mobile-step");
 const paymentAmountStep = document.getElementById("payment-amount-step");
 const sendMobileInput = document.getElementById("send-mobile-input");
+const sendPickContact = document.getElementById("send-pick-contact");
+const sendContactName = document.getElementById("send-contact-name");
 
 const paymentConfirmButton = document.getElementById("payment-popup-confirm");
 
 let paymentMode = "send";
 let sendMobileStepActive = true;
 let recipientMobile = "";
+// OPEN PHONE CONTACT PICKER
+sendPickContact.addEventListener("click", async () => {
+    if (!("contacts" in navigator) || !navigator.contacts.select) {
+        alert("Contact selection is not supported in this browser. Please use Chrome on Android.");
+        return;
+    }
+
+    try {
+        const contacts = await navigator.contacts.select(
+            ["name", "tel"],
+            { multiple: false }
+        );
+
+        if (!contacts.length) return;
+
+        const contact = contacts[0];
+        const name = contact.name?.[0] || "Contact";
+        const phone = contact.tel?.[0] || "";
+
+        let number = phone.replace(/\D/g, "");
+
+        if (number.startsWith("91") && number.length === 12) {
+            number = number.slice(2);
+        } else if (number.startsWith("0") && number.length === 11) {
+            number = number.slice(1);
+        }
+
+        if (number.length > 10) {
+            number = number.slice(-10);
+        }
+
+        sendMobileInput.value = number;
+        sendContactName.textContent = "Selected: " + name;
+        sendContactName.hidden = false;
+
+    } catch (error) {
+        console.log("Contact selection cancelled or failed:", error);
+    }
+});
 
 // OPEN SEND MONEY
 
@@ -679,26 +720,174 @@ document.getElementById("send-money").addEventListener("click", function () {
     sendMobileInput.focus();
 });
 
-// OPEN RECEIVE MONEY
+// TO BANK & SELF A/C SCREEN
 
-document.getElementById("receive-money").addEventListener("click", function () {
-    paymentMode = "receive";
-    sendMobileStepActive = false;
+const bankTransferScreen = document.getElementById("bank-transfer-screen");
+const bankTransferBack = document.getElementById("bank-transfer-back");
+// SELF BANK ACCOUNT VALIDATION
 
-    paymentPopup.querySelector("h3").textContent = "Receive Money";
+const selfTransferContinue = document.getElementById("self-transfer-continue");
+const selfTransferReview = document.getElementById("self-transfer-review");
 
-    sendMobileStep.hidden = true;
-    paymentAmountStep.hidden = false;
+selfTransferContinue.addEventListener("click", function () {
 
-    paymentAmountInput.value = "";
-    paymentPopupMessage.textContent = "";
+    const name = document.getElementById("self-account-name").value.trim();
+    const account = document.getElementById("self-account-number").value.trim();
+    const confirmAccount = document.getElementById("self-confirm-account").value.trim();
+    const ifsc = document.getElementById("self-account-ifsc").value.trim().toUpperCase();
+    const amount = Number(document.getElementById("self-transfer-amount").value);
+    const error = document.getElementById("self-transfer-error");
 
-    paymentConfirmButton.textContent = "Receive";
+    error.textContent = "";
 
-    paymentPopup.hidden = false;
-    paymentAmountInput.focus();
+    if (!name || !/^[a-zA-Z\s.]+$/.test(name)) {
+        error.textContent = "Please enter a valid account holder name.";
+        return;
+    }
+
+    if (!/^\d{9,18}$/.test(account)) {
+        error.textContent = "Enter a valid account number.";
+        return;
+    }
+
+    if (account !== confirmAccount) {
+        error.textContent = "Account numbers do not match.";
+        return;
+    }
+
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
+        error.textContent = "Enter a valid IFSC code.";
+        return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        error.textContent = "Enter a valid transfer amount.";
+        return;
+    }
+
+    if (amount > balance) {
+        error.textContent = "Insufficient wallet balance.";
+        return;
+    }
+
+    document.getElementById("review-holder").textContent = name;
+    document.getElementById("review-account").textContent = "••••" + account.slice(-4);
+    document.getElementById("review-ifsc").textContent = ifsc;
+    document.getElementById("review-amount").textContent =
+        "₹" + amount.toLocaleString("en-IN", { minimumFractionDigits: 2 });
+
+    selfBankForm.hidden = true;
+    selfTransferReview.hidden = false;
+
+});
+// OPEN SELF BANK ACCOUNT FORM
+
+const selfBankButton = document.getElementById("self-bank-account");
+const selfBankForm = document.getElementById("self-bank-form");
+
+selfBankButton.addEventListener("click", function () {
+    selfBankForm.hidden = false;
+
+    document.querySelector(".bank-transfer-hero").hidden = true;
+    document.querySelector(".bank-transfer-options").hidden = true;
+    document.querySelector(".bank-transfer-footer").hidden = true;
+});
+// OPEN ADD MONEY FORM
+
+const addMoneyOption = document.getElementById("add-money-option");
+const addMoneyForm = document.getElementById("add-money-form");
+
+addMoneyOption.addEventListener("click", function () {
+
+    document.querySelector(".bank-transfer-hero").hidden = true;
+    document.querySelector(".bank-transfer-cards").hidden = true;
+    document.getElementById("upi-transfer").hidden = true;
+    addMoneyOption.hidden = true;
+    document.querySelector(".bank-transfer-footer").hidden = true;
+
+    addMoneyForm.hidden = false;
 });
 
+// CONFIRM ADD MONEY
+
+document.getElementById("add-money-confirm").addEventListener("click", function () {
+
+    const amount = Number(document.getElementById("add-money-amount").value);
+    const error = document.getElementById("add-money-error");
+
+    error.textContent = "";
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        error.textContent = "Enter a valid amount.";
+        return;
+    }
+
+    balance = Math.round((balance + amount) * 100) / 100;
+
+    addTransaction(
+        "Money Added",
+        amount,
+        "credit",
+        "Added to Wallet"
+    );
+
+    addMoneyForm.hidden = true;
+    bankTransferScreen.hidden = true;
+    showHome();
+});
+
+// OPEN BANK TRANSFER SCREEN
+
+document.getElementById("receive-money").addEventListener("click", function () {
+    paymentPopup.hidden = true;
+    bankTransferScreen.hidden = false;
+});
+
+// BACK TO HOME
+
+bankTransferBack.addEventListener("click", function () {
+
+    if (!selfTransferReview.hidden) {
+        selfTransferReview.hidden = true;
+        selfBankForm.hidden = false;
+
+    } else if (!selfBankForm.hidden) {
+        selfBankForm.hidden = true;
+
+        document.querySelector(".bank-transfer-hero").hidden = false;
+        document.querySelector(".bank-transfer-options").hidden = false;
+        document.querySelector(".bank-transfer-footer").hidden = false;
+
+    } else {
+        bankTransferScreen.hidden = true;
+        showHome();
+    }
+
+});
+// CONFIRM SELF BANK TRANSFER
+
+document.getElementById("self-transfer-confirm").addEventListener("click", function () {
+
+    const name = document.getElementById("self-account-name").value.trim();
+    const amount = Number(document.getElementById("self-transfer-amount").value);
+
+    if (!Number.isFinite(amount) || amount <= 0 || amount > balance) {
+        alert("Insufficient wallet balance or invalid amount.");
+        return;
+    }
+balance = Math.round((balance - amount) * 100) / 100;
+    addTransaction(
+        "Self Bank Transfer",
+        amount,
+        "debit",
+        "Self Account - " + name
+    );
+
+    selfTransferReview.hidden = true;
+    bankTransferScreen.hidden = true;
+    showHome();
+
+});
 // MOBILE NUMBER INPUT
 
 sendMobileInput.addEventListener("input", function () {
@@ -1178,7 +1367,19 @@ document.getElementById("qr-method-back").addEventListener("click", function () 
     qrPaymentModal.hidden = false;
 
 });
+// BACK FROM ADD MONEY FORM
 
+document.getElementById("add-money-back").addEventListener("click", function () {
+
+    addMoneyForm.hidden = true;
+
+    document.querySelector(".bank-transfer-hero").hidden = false;
+    document.querySelector(".bank-transfer-cards").hidden = false;
+    document.getElementById("upi-transfer").hidden = false;
+    addMoneyOption.hidden = false;
+    document.querySelector(".bank-transfer-footer").hidden = false;
+
+});
 // ADD BANK ACCOUNT
 
 document.getElementById("qr-add-bank").addEventListener("click", function () {
@@ -1262,7 +1463,7 @@ document.getElementById("upi-pin-close").addEventListener("click", function () {
  // DEMO PAYMENT CONFIRMATION
 upiPinPay.addEventListener("click", function () {
     if (upiPinDigits.length !== 4) {
-        alert("Please enter all 4 demo PIN digits.");
+        alert("Please enter all 4 PIN digits.");
         return;
     }
 
@@ -1284,6 +1485,15 @@ upiPinPay.addEventListener("click", function () {
     upiPinScreen.hidden = true;
 
     addTransaction("QR Payment", roundedAmount, "debit", recipient.name);
+    const latestQRTransaction = transactions[transactions.length - 1];
+
+latestQRTransaction.recipientUpi = recipient.upiId;
+latestQRTransaction.bankingName = recipient.name;
+latestQRTransaction.bankName = {
+    bob: "Bank Of Baroda - 4185",
+    sbi1: "State Bank Of India - 6971",
+    sbi2: "State Bank Of India - 0895"
+}[selectedQRBank] || "Bank Of Baroda - 4185";
     announceSentPayment(roundedAmount);
 
     const successScreen = document.getElementById("payment-success-screen");
@@ -1305,30 +1515,39 @@ upiPinPay.addEventListener("click", function () {
         });
 
     // RECIPIENT DETAILS
-    document.getElementById("success-recipient-name").textContent =
-        recipient.name;
+    // RECIPIENT DETAILS (SAFE UPDATE)
+const successRecipientName = document.getElementById("success-recipient-name");
+const successRecipientUpi = document.getElementById("success-recipient-upi");
+const successPaymentAmount = document.getElementById("success-payment-amount");
+const successAvatar = document.getElementById("success-avatar");
 
-    document.getElementById("success-recipient-upi").textContent =
-        recipient.upiId;
+if (successRecipientName) {
+    successRecipientName.textContent = recipient.name;
+}
 
-    document.getElementById("success-payment-amount").textContent =
-        "₹" + roundedAmount.toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+if (successRecipientUpi) {
+    successRecipientUpi.textContent = recipient.upiId;
+}
 
-    document.getElementById("success-avatar").textContent =
+if (successPaymentAmount) {
+    successPaymentAmount.textContent = "₹" + roundedAmount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+if (successAvatar) {
+    successAvatar.textContent = recipient.name.trim().charAt(0).toUpperCase();
+}
         recipient.name.trim().charAt(0).toUpperCase();
 
     // SHOW GREEN SUCCESS SCREEN FIRST
 successScreen.hidden = false;
 
-const detailsScreen = document.getElementById("payment-details-screen");
-
-// SHOW BLACK DETAILS SCREEN AFTER 2 SECONDS
+// SHOW TRANSACTION DETAILS AFTER 2 SECONDS
 setTimeout(function () {
     successScreen.hidden = true;
-    detailsScreen.hidden = false;
+    showTransactionSuccessPage(latestQRTransaction);
 }, 2000);
 
     scannedQRRecipient = null;
@@ -1342,56 +1561,259 @@ document.getElementById("payment-success-done").addEventListener("click", functi
     document.getElementById("payment-details-screen").hidden = true;
     showHome();
 });
+// SHOW TRANSACTION SUCCESSFUL DETAILS PAGE
+function showTransactionSuccessPage(transaction) {
 
-// VIEW PAYMENT DETAILS
-document.getElementById("view-payment-details").addEventListener("click", function () {
-    document.getElementById("payment-details-screen").hidden = true;
+    const screen = document.getElementById("transaction-success-screen");
+
+    const paymentDate = new Date(transaction.date);
+
+    const formattedDate =
+        paymentDate.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            timeZone: "Asia/Kolkata"
+        }) + " at " +
+        paymentDate.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: "Asia/Kolkata"
+        });
+
+    const formattedAmount = "₹" + Number(transaction.amount).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+    document.getElementById("transaction-success-date").textContent = formattedDate;
+
+    document.getElementById("transaction-recipient-avatar").textContent =
+        (transaction.recipientName || "P").trim().charAt(0).toUpperCase();
+
+    document.getElementById("transaction-recipient-name").textContent =
+        transaction.recipientName || "Recipient";
+
+    document.getElementById("transaction-recipient-upi").textContent =
+        transaction.recipientUpi || "—";
+
+    document.getElementById("transaction-success-amount").textContent =
+        formattedAmount;
+
+    document.getElementById("transaction-banking-name").textContent =
+        transaction.recipientName || "—";
+
+    document.getElementById("transaction-success-id").textContent =
+        transaction.id || "—";
+
+    document.getElementById("transaction-debit-bank").textContent =
+        "SAVINGS: " + (transaction.bankName || "—");
+
+    document.getElementById("transaction-debit-amount").textContent =
+        formattedAmount;
+
+    document.getElementById("transaction-success-utr").textContent =
+        "UTR: " + (transaction.utr || "—");
+
+    screen.hidden = false;
+}
+// TRANSACTION DETAILS BACK BUTTON
+document.getElementById("transaction-success-back").addEventListener("click", function () {
+    document.getElementById("transaction-success-screen").hidden = true;
+    document.getElementById("payment-details-screen").hidden = false;
+});
+// COPY TRANSACTION ID
+document.getElementById("copy-transaction-id").addEventListener("click", function () {
+    const transactionId =
+        document.getElementById("transaction-success-id").textContent;
+
+    navigator.clipboard.writeText(transactionId)
+        .then(function () {
+            alert("Transaction ID copied!");
+        })
+        .catch(function () {
+            prompt("Copy Transaction ID:", transactionId);
+        });
+});
+// COPY TRANSACTION UTR
+document.getElementById("copy-transaction-utr").addEventListener("click", function () {
+    const utr =
+        document.getElementById("transaction-success-utr").textContent.replace("UTR: ", "");
+
+    navigator.clipboard.writeText(utr)
+        .then(function () {
+            alert("UTR copied!");
+        })
+        .catch(function () {
+            prompt("Copy UTR:", utr);
+        });
+});
+// TRANSACTION VIEW HISTORY
+document.getElementById("transaction-view-history").addEventListener("click", function () {
+    document.getElementById("transaction-success-screen").hidden = true;
     showHistory();
 });
+// TRANSACTION SEND AGAIN
+document.getElementById("transaction-send-again").addEventListener("click", function () {
+    document.getElementById("transaction-success-screen").hidden = true;
+    showHome();
 
-// SHARE RECEIPT
-document.getElementById("share-payment-receipt").addEventListener("click", async function () {
-    const recipientName =
-        document.getElementById("success-recipient-name").textContent;
+    const sendButton = document.getElementById("send-money");
 
-    const recipientUpi =
-        document.getElementById("success-recipient-upi").textContent;
-
-    const amount =
-        document.getElementById("success-payment-amount").textContent;
-
-    const receiptText =
-        "Payment Successful\n" +
-        "To: " + recipientName + "\n" +
-        "UPI ID: " + recipientUpi + "\n" +
-        "Amount: " + amount + "\n" +
-        successDate.textContent;
-
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: "Payment Receipt",
-                text: receiptText
-            });
-        } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Share error:", error);
-            }
-        }
-    } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(receiptText);
-        alert("Receipt details copied!");
-    } else {
-        alert("Sharing is not supported on this browser.");
+    if (sendButton) {
+        sendButton.click();
     }
 });
+// TRANSACTION SHARE RECEIPT AS IMAGE
+const transactionShareButton =
+    document.getElementById("transaction-share-receipt");
 
-// SPLIT EXPENSE
-document.getElementById("split-expense-btn").addEventListener("click", function () {
+if (transactionShareButton) {
+    transactionShareButton.addEventListener("click", async function () {
+
+        if (typeof html2canvas === "undefined") {
+            alert("Receipt image tool load nahi hua. Internet connection check karo.");
+            return;
+        }
+
+        const receiptScreen =
+            document.getElementById("transaction-success-screen");
+
+        try {
+            const canvas = await html2canvas(receiptScreen, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#f5f3f7",
+                onclone: function (clonedDocument) {
+                    const clonedScreen =
+                        clonedDocument.getElementById("transaction-success-screen");
+
+                    clonedScreen.hidden = false;
+
+                    const hideElements = [
+                        "#transaction-success-back",
+                        ".transaction-success-actions",
+                        ".transaction-support-card"
+                    ];
+
+                    hideElements.forEach(function (selector) {
+                        const element = clonedScreen.querySelector(selector);
+                        if (element) element.style.display = "none";
+                    });
+
+                    clonedScreen.style.height = "auto";
+                    clonedScreen.style.overflow = "visible";
+                }
+            });
+
+            canvas.toBlob(async function (blob) {
+                if (!blob) {
+                    alert("Receipt image create nahi ho payi.");
+                    return;
+                }
+
+                const file = new File(
+                    [blob],
+                    "Payment-Receipt.png",
+                    { type: "image/png" }
+                );
+
+                if (navigator.share && navigator.canShare &&
+                    navigator.canShare({ files: [file] })) {
+
+                    try {
+                        await navigator.share({
+                            title: "Payment Receipt",
+                            files: [file]
+                        });
+                    } catch (error) {
+                        if (error.name !== "AbortError") {
+                            console.error("Share error:", error);
+                        }
+                    }
+
+                } else {
+                    const imageUrl = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+
+                    link.href = imageUrl;
+                    link.download = "Payment-Receipt.png";
+                    link.click();
+
+                    URL.revokeObjectURL(imageUrl);
+                    alert("Receipt image download ho gayi!");
+                }
+            }, "image/png");
+
+        } catch (error) {
+            console.error("Receipt image error:", error);
+            alert("Receipt image banane mein problem aayi.");
+        }
+    });
+}
+// VIEW PAYMENT DETAILS
+const viewPaymentDetailsButton =
+    document.getElementById("view-payment-details");
+
+if (viewPaymentDetailsButton) {
+    viewPaymentDetailsButton.addEventListener("click", function () {
+        document.getElementById("payment-details-screen").hidden = true;
+
+        const transaction = transactions[transactions.length - 1];
+
+        if (!transaction) return;
+
+        showTransactionSuccessPage(transaction);
+    });
+}
+
+// SHARE RECEIPT
+const sharePaymentReceiptButton =
+    document.getElementById("share-payment-receipt");
+
+if (sharePaymentReceiptButton) {
+    sharePaymentReceiptButton.addEventListener("click", async function () {
+        const recipientName =
+            document.getElementById("success-recipient-name").textContent;
+
+        const recipientUpi =
+            document.getElementById("success-recipient-upi").textContent;
+
+        const amount =
+            document.getElementById("success-payment-amount").textContent;
+
+        const receiptText =
+            "Payment Successful\n" +
+            "To: " + recipientName + "\n" +
+            "UPI ID: " + recipientUpi + "\n" +
+            "Amount: " + amount + "\n" +
+            document.getElementById("payment-success-date").textContent;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: "Payment Receipt",
+                    text: receiptText
+                });
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    console.error("Share error:", error);
+                }
+            }
+        } else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(receiptText);
+            alert("Receipt details copied!");
+        } else {
+            alert("Sharing is not supported on this browser.");
+        }
+    });
+}
+
+// TRANSACTION SPLIT EXPENSE
+document.getElementById("transaction-split-expense").addEventListener("click", function () {
     alert("Split Expense feature coming soon!");
 });
-
-
 
 // CANCEL QR PAYMENT
 
@@ -1499,11 +1921,52 @@ const serviceForm = document.getElementById("service-form");
 const serviceTitle = document.getElementById("service-form-title");
 const serviceLabel = document.getElementById("service-number-label");
 const serviceNumber = document.getElementById("service-number");
+const rechargePickContact = document.getElementById("recharge-pick-contact");
+const rechargeContactName = document.getElementById("recharge-contact-name");
 const serviceProvider = document.getElementById("service-provider");
 const serviceAmount = document.getElementById("service-amount");
 const paymentForm = document.getElementById("service-payment-form");
 
 let selectedService = null;
+// MOBILE RECHARGE CONTACT PICKER
+rechargePickContact.addEventListener("click", async () => {
+    if (!("contacts" in navigator) || !navigator.contacts.select) {
+        alert("Contact selection is not supported. Please use Chrome on Android.");
+        return;
+    }
+
+    try {
+        const contacts = await navigator.contacts.select(
+            ["name", "tel"],
+            { multiple: false }
+        );
+
+        if (!contacts.length) return;
+
+        const contact = contacts[0];
+        const name = contact.name?.[0] || "Contact";
+        const phone = contact.tel?.[0] || "";
+
+        let number = phone.replace(/\D/g, "");
+
+        if (number.startsWith("91") && number.length === 12) {
+            number = number.slice(2);
+        } else if (number.startsWith("0") && number.length === 11) {
+            number = number.slice(1);
+        }
+
+        if (number.length > 10) {
+            number = number.slice(-10);
+        }
+
+        serviceNumber.value = number;
+        rechargeContactName.textContent = "Selected: " + name;
+        rechargeContactName.hidden = false;
+
+    } catch (error) {
+        console.log("Contact selection cancelled or failed:", error);
+    }
+});
 
 // OPEN SERVICE FORM
 
