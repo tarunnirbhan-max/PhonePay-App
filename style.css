@@ -6376,3 +6376,6 @@ body,
 #qr-reader__scan_region canvas {
     display: none !important;
 }
+#qr-reader #qr-shaded-region {
+    display: none !important;
+}
