@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhonePay Virtual Soundbox</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>PhonePay Security Lab</h1>
+    <p>Soundbox — Educational </p>
+</header>
+
+<div class="container">
+
+    <div class="soundbox">
+        <div class="speaker">🔊</div>
+        <div class="success-light" id="successLight"></div>
+        <h2>Virtual Soundbox</h2>
+        <p>Payment Announcement</p>
+
+        <div class="amount" id="displayAmount">₹ 0.00</div>
+
+        <div class="status" id="status">
+            Waiting for demo payment...
+        </div>
+    </div>
+
+    <div class="panel">
+        <label for="amount">Enter Amount (₹)</label>
+
+        <input
+            type="number"
+            id="amount"
+            placeholder="Enter amount"
+            min="1"
+            max="100000"
+            step="1"
+        >
+
+        <button id="testButton">
+            Test Payment
+        </button>
+    </div>
+
+    <div class="panel">
+        <h3>Transaction History</h3>
+        <div id="historyList">
+            <p>No transactions yet.</p>
+        </div>
+    </div>
+
+    <p class="note">
+        Educational simulation only. No real payment is processed.
+    </p>
+
+</div>
+
+<script>
+    const amountInput = document.getElementById("amount");
+    const testButton = document.getElementById("testButton");
+    const displayAmount = document.getElementById("displayAmount");
+    const statusBox = document.getElementById("status");
+    const historyList = document.getElementById("historyList");
+
+    testButton.addEventListener("click", async function () {
+
+        const amount = Number(amountInput.value);
+
+        if (!Number.isFinite(amount) || amount <= 0 || amount > 100000) {
+            alert("Please enter a valid demo amount.");
+            return;
+        }
+
+        testButton.disabled = true;
+        statusBox.textContent = "Processing demo event...";
+
+        try {
+            const response = await fetch("/api/soundbox-demo", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ amount })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Request failed");
+            }
+
+            displayAmount.textContent =
+                "₹ " + Number(data.amount).toFixed(2);
+
+            statusBox.textContent =
+                data.mode + " — " + data.message;
+
+            // Add demo transaction to history
+            const historyItem = document.createElement("div");
+            historyItem.className = "history-item";
+
+            const historyLeft = document.createElement("div");
+            historyLeft.className = "history-left";
+
+            const historyTitle = document.createElement("div");
+            historyTitle.className = "history-title";
+            historyTitle.textContent = "Payment Received";
+
+            const historyId = document.createElement("div");
+            historyId.className = "history-id";
+            historyId.textContent =
+                "Transaction ID:" + Date.now().toString().slice(-10);
+
+            const historyDate = document.createElement("div");
+            historyDate.className = "history-date";
+            historyDate.textContent = new Date().toLocaleString("en-IN");
+
+            const historyAmount = document.createElement("div");
+            historyAmount.className = "history-amount";
+            historyAmount.textContent =
+                "+ ₹ " + Number(data.amount).toFixed(2);
+
+            historyLeft.appendChild(historyTitle);
+            historyLeft.appendChild(historyId);
+            historyLeft.appendChild(historyDate);
+
+            historyItem.appendChild(historyLeft);
+            historyItem.appendChild(historyAmount);
+
+            historyItem.style.cursor = "pointer";
+
+            // Professional transaction details popup
+            historyItem.addEventListener("click", function () {
+
+                const popup = document.createElement("div");
+                popup.className = "transaction-popup";
+
+                popup.innerHTML = `
+                    <div class="transaction-popup-content">
+
+                        <h2>Payment Details</h2>
+
+                        <div class="transaction-detail-row">
+                            <span>Amount</span>
+                            <strong>₹ ${Number(data.amount).toFixed(2)}</strong>
+                        </div>
+
+                        <div class="transaction-detail-row">
+                            <span>Transaction ID</span>
+                            <strong>${historyId.textContent.replace("Transaction ID:", "")}</strong>
+                        </div>
+
+                        <div class="transaction-detail-row">
+                            <span>Date & Time</span>
+                            <strong>${historyDate.textContent}</strong>
+                        </div>
+
+                        <div class="transaction-detail-row">
+                            <span>Status</span>
+                            <strong style="color: #269b58;">
+                                Successful
+                            </strong>
+                        </div>
+
+                        <button class="close-popup">Close</button>
+
+                    </div>
+                `;
+
+                document.body.appendChild(popup);
+
+                popup.querySelector(".close-popup")
+                    .addEventListener("click", function () {
+                        popup.remove();
+                    });
+
+                popup.addEventListener("click", function (event) {
+                    if (event.target === popup) {
+                        popup.remove();
+                    }
+                });
+
+            });
+
+            historyList.querySelector("p")?.remove();
+            historyList.prepend(historyItem);
+
+            // Hindi voice announcement
+            const speech = new SpeechSynthesisUtterance(
+                amount + " रुपये प्राप्त हुए।"
+            );
+
+            const speaker = document.querySelector(".speaker");
+            const successLight = document.getElementById("successLight");
+
+            speech.lang = "hi-IN";
+            speech.rate = 0.85;
+            speech.pitch = 1;
+
+            speech.onstart = function () {
+                speaker.classList.add("playing");
+                successLight.classList.add("active");
+            };
+
+            speech.onend = function () {
+                speaker.classList.remove("playing");
+                successLight.classList.remove("active");
+            };
+
+            speech.onerror = function () {
+                speaker.classList.remove("playing");
+                successLight.classList.remove("active");
+            };
+
+            window.speechSynthesis.speak(speech);
+
+        } catch (error) {
+            statusBox.textContent = "Error: " + error.message;
+        } finally {
+            testButton.disabled = false;
+        }
+
+    });
+</script>
+
+</body>
+</html>
