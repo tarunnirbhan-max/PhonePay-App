@@ -1071,7 +1071,12 @@ async function openQRScanner() {
             { facingMode: "environment" },
             {
                 fps: 10,
-                qrbox: { width: 250, height: 250 },
+                qrbox: function(viewfinderWidth, viewfinderHeight) {
+    return {
+        width: 250,
+        height: 250
+    };
+},
                 aspectRatio: 1
             },
             async function(decodedText) {
